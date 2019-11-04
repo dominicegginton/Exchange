@@ -12,6 +12,7 @@ const Logger = require('koa-logger')
 const Views = require('koa-views')
 
 /* IMPORT GLOBAL ROUTES */
+const HomeRouter = require('./routes/home')
 const StylesheetRouter = require('./routes/stylesheet')
 
 /* SETUP KOA */
@@ -27,6 +28,7 @@ app.use(Session(app))
 app.use(Logger())
 
 /* SETUP GLOBAL ROUTES */
+app.use(HomeRouter.routes())
 app.use(StylesheetRouter.routes())
 
 /* SETUP PORT */
