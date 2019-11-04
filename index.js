@@ -11,6 +11,9 @@ const Session = require('koa-session')
 const Logger = require('koa-logger')
 const Views = require('koa-views')
 
+/* IMPORT GLOBAL ROUTES */
+const StylesheetRouter = require('./routes/stylesheet')
+
 /* SETUP KOA */
 const app = new Koa()
 
@@ -22,6 +25,9 @@ app.use(Body({multipart: true}))
 app.use(BodyParser())
 app.use(Session(app))
 app.use(Logger())
+
+/* SETUP GLOBAL ROUTES */
+app.use(StylesheetRouter.routes())
 
 /* SETUP PORT */
 const defaultPort = 8080
