@@ -58,6 +58,7 @@
     "jsdoc": "^3.6.3",
     "jsdoc-route-plugin": "^0.1.0",
     "markdownlint": "^0.17.0",
+    "mock-fs": "^4.10.3",
     "sqlite-async": "^1.0.12"
   }
 }
