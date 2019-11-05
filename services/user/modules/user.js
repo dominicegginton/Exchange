@@ -3,6 +3,8 @@
 /* IMPORT MODULES */
 const {Client} = require('pg')
 const Bcrypt = require('bcrypt-promise')
+const Mime = require('mime-types')
+const FileSystem = require('fs-extra')
 const GenerateId = require('../../../utils/generateId')
 const Validate = require('../../../utils/validate')
 
@@ -36,6 +38,22 @@ class User {
 			VALUES('${id}', '${newUser.name}', '${newUser.email}' , '${newUser.password}');`
 			await this.database.query(sql)
 			return id
+		} catch (error) {
+			throw error
+		}
+	}
+
+	async uploadAvatar(userId, avatar) {
+		try {
+			Validate(avatar, ['path', 'type', 'size'])
+			if (avatar.size === 0) return
+			const {path, type} = avatar
+			const fileExtension = Mime.extension(type)
+			const fileName = `${GenerateId()}.${fileExtension}`
+			await FileSystem.copy(path, `data/avatars/${fileName}`)
+			const sql = `UPDATE Users SET avatar='${fileName}' WHERE id='${userId}'`
+			await this.database.query(sql)
+			return fileName
 		} catch (error) {
 			throw error
 		}
