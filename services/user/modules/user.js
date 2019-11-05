@@ -31,7 +31,7 @@ class User {
 	async register(newUser) {
 		try {
 			Validate(newUser, ['name', 'email', 'password'])
-			if(await this.exists(newUser.email) === true) throw new Error('user already exists')
+			if(await this.exists(newUser.email) === true) throw new Error(`Email '${newUser.email}' already registered`)
 			const id = GenerateId()
 			newUser.password = await Bcrypt.hash(newUser.password, slatRounds)
 			const sql = `INSERT INTO Users (id, name, email, password)
