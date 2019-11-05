@@ -10,7 +10,8 @@ html(lang='en')
 			h1 Welcome
 			h2 register to get started
 			if error
-				p.error=error.message
+				.error
+					p=error.message
 			form(method='POST', action='/register', enctype="multipart/form-data", autocomplete="off")
 				.group
 					input.textbox(type='text' name='name' required)
