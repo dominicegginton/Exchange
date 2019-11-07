@@ -15,6 +15,9 @@ const Views = require('koa-views')
 const HomeRouter = require('./routes/home')
 const StylesheetRouter = require('./routes/stylesheet')
 
+/* IMPORT SERVICES */
+const UserService = require('./services/user')
+
 /* SETUP KOA */
 const app = new Koa()
 
@@ -30,6 +33,9 @@ app.use(Logger())
 /* SETUP GLOBAL ROUTES */
 app.use(HomeRouter.routes())
 app.use(StylesheetRouter.routes())
+
+/* SETUP SERVICES */
+app.use(UserService)
 
 /* SETUP PORT */
 const defaultPort = 8080
