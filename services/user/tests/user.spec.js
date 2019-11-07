@@ -31,7 +31,7 @@ describe('register()', () => {
 		const newUserID = await this.user.register(newUser)
 		expect(typeof newUserID).toBe('string')
 		expect(newUserID.length).toBe(36)
-		await expect(this.user.register(newUser)).rejects.toEqual(Error(`Email 'test@testing.com' already registered`))
+		await expect(this.user.register(newUser)).rejects.toEqual(Error('Email "test@testing.com" already registered'))
 		done()
 	})
 
