@@ -24,5 +24,34 @@ main
 		min-width: unset
 		width: unset
 
+.banner
+	margin: 50 0 50 0
+	img
+		width: $iconSize
+	.right
+		float: right
+		height: $iconSize
+		.separator
+			display: inline-block
+			position: relative
+			top: 50%
+			transform: translateY(-50%)
+			margin: 0 20 0 20
+		.separator:before
+			content: '/'
+		.barButton
+			display: inline-block
+			position: relative
+			top: 50%
+			transform: translateY(-50%)
+		.avatar
+			vertical-align: top
+			display: inline-block
+			img
+				height: $iconSize
+				border-radius: 10px
+				display: block
+
+
 .error
 	margin: 40 0 0 0
