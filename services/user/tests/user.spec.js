@@ -35,23 +35,44 @@ describe('register()', () => {
 		done()
 	})
 
-	test('register with no name should error', async done => {
+	test('register with no name object should error', async done => {
 		expect.assertions(1)
 		const newUser = {email: 'test@testing.com', password: 'password'}
 		await expect(this.user.register(newUser)).rejects.toEqual(Error('name is empty'))
 		done()
 	})
 
-	test('register with no email should error', async done => {
+	test('register with empty name should error', async done => {
+		expect.assertions(1)
+		const newUser = {name: '', email: 'test@testing.com', password: 'password'}
+		await expect(this.user.register(newUser)).rejects.toEqual(Error('name is empty'))
+		done()
+	})
+
+	test('register with no email object should error', async done => {
 		expect.assertions(1)
 		const newUser = {name: 'Test', password: 'password'}
 		await expect(this.user.register(newUser)).rejects.toEqual(Error('email is empty'))
 		done()
 	})
 
-	test('register with no password should error', async done => {
+	test('register with empty email should error', async done => {
+		expect.assertions(1)
+		const newUser = {name: 'Test', email: '', password: 'password'}
+		await expect(this.user.register(newUser)).rejects.toEqual(Error('email is empty'))
+		done()
+	})
+
+	test('register with no password object should error', async done => {
 		expect.assertions(1)
 		const newUser = {name: 'Test', email: 'test@testing.com'}
+		await expect(this.user.register(newUser)).rejects.toEqual(Error('password is empty'))
+		done()
+	})
+
+	test('register with empty password should error', async done => {
+		expect.assertions(1)
+		const newUser = {name: 'Test', email: 'test@testing.com', password: ''}
 		await expect(this.user.register(newUser)).rejects.toEqual(Error('password is empty'))
 		done()
 	})
