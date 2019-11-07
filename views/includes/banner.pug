@@ -1,0 +1,17 @@
+.banner
+	a(href='/')
+		img(src='/media/logo.svg')
+	.right
+		if user
+			.barButton
+				a(href='/logout') Logout
+			.separator
+			.avatar
+				a(href='/user/' + user.id)
+					img(src='/avatar/' + user.avatar)
+		else
+			.barButton
+				a(href='/login') Login
+			.separator
+			.barButton
+				a(href='/register') Register
