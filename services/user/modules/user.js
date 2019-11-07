@@ -76,6 +76,17 @@ class User {
 		}
 	}
 
+	async getDetails(userId) {
+		try {
+			const sql = `SELECT * FROM Users WHERE id = '${userId}'`
+			const result = await this.database.query(sql)
+			if (!!result.rows[0]) return result.rows[0]
+			else throw new Error('Invalid user id')
+		} catch (error) {
+			throw error
+		}
+	}
+
 	async exists(email) {
 		const sql = `SELECT COUNT(id) as records FROM Users WHERE email='${email}';`
 		const result = await this.database.query(sql)

@@ -196,3 +196,39 @@ describe('uploadAvatar()', () => {
 		done()
 	})
 })
+
+describe('getDetails()', () => {
+
+	beforeEach(async() => {
+		const newUser = {name: 'Test', email: 'test@testing.com', password: 'password'}
+		this.userId = await this.user.register(newUser)
+	})
+
+	test('get details for valid user', async done => {
+		expect.assertions(4)
+		const userDetails = await this.user.getDetails(this.userId)
+		expect(typeof userDetails).toBe('object')
+		expect(userDetails.name).toBe('Test')
+		expect(userDetails.email).toBe('test@testing.com')
+		expect(userDetails.avatar).toBe(null)
+		done()
+	})
+
+	test('get details for valid user when more than one user is registered', async done => {
+		expect.assertions(4)
+		const newUser = {name: 'Foo', email: 'foo@testing.com', password: 'password'}
+		const newUserId = await this.user.register(newUser)
+		const userDetails = await this.user.getDetails(newUserId)
+		expect(typeof userDetails).toBe('object')
+		expect(userDetails.name).toBe('Foo')
+		expect(userDetails.email).toBe('foo@testing.com')
+		expect(userDetails.avatar).toBe(null)
+		done()
+	})
+
+	test('get details for invalid user id should error', async done => {
+		expect.assertions(1)
+		await expect(this.user.getDetails('invlaid-id')).rejects.toEqual(Error('Invalid user id'))
+		done()
+	})
+})
