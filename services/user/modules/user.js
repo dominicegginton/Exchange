@@ -43,6 +43,23 @@ class User {
 		}
 	}
 
+	async login(userAuthentication) {
+		try {
+			Validate(userAuthentication, ['email', 'password'])
+			if (await this.exists(userAuthentication.email) === false) {
+				throw new Error(`Email "${userAuthentication.email}" is not registered`)
+			}
+			const sql = `SELECT id, password FROM Users WHERE email = '${userAuthentication.email}';`
+			const result = await this.database.query(sql)
+			const data = result.rows[0]
+			if (await Bcrypt.compare(userAuthentication.password, data.password) === false) {
+				throw new Error('Invalid password')
+			} else return data.id
+		} catch (error) {
+			throw error
+		}
+	}
+
 	async uploadAvatar(userId, avatar) {
 		try {
 			Validate(avatar, ['path', 'type', 'size'])
