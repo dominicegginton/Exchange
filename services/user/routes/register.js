@@ -18,7 +18,7 @@ router.post('/register', async ctx => {
 		const user = await new User()
 		const newUserID = await user.register(newUser)
 		await user.uploadAvatar(newUserID, newUserAvatar)
-		await ctx.redirect('/')
+		await ctx.redirect('/login')
 	} catch (error) {
 		await ctx.render('register', {error: error})
 	}
