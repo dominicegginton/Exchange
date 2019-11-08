@@ -9,6 +9,8 @@ services:
       USER_DB_HOST: db_user
     env_file:
       - .env
+    depends_on:
+      - db_user
     ports:
       - ${APP_PORT}:${APP_PORT}
     volumes:
