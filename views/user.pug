@@ -1,0 +1,13 @@
+doctype html5
+html(lang='en')
+	include includes/head.pug
+	head
+		link(rel = 'stylesheet', href = '/stylesheet/user')
+		title='Exchange - ' + user.name
+	body
+		main
+			include includes/banner.pug
+			.largeAvatar
+				img(src='/avatar/' + user.avatar)
+			h1=user.name
+			h2=user.email
