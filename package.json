@@ -2,6 +2,11 @@
   "name": "exchange",
   "version": "0.0.1",
   "description": "exchange website",
+  "repository": {
+	"type" : "git",
+	"url" : "https://github.coventry.ac.uk/340CT-1920SEPJAN/eggintod.git"
+  },
+  "homepage": "https://github.coventry.ac.uk/340CT-1920SEPJAN/eggintod#readme",
   "main": "index.js",
   "engines": {
     "node": "12.x"
