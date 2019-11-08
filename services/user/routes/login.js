@@ -8,7 +8,7 @@ const User = require('../modules/user')
 const router = new Router()
 
 router.get('/login', async ctx => {
-	if (ctx.session.authenticated === true) ctx.redirect('/')
+	if (ctx.state.authenticated === true) ctx.redirect('/')
 	else await ctx.render('login')
 })
 

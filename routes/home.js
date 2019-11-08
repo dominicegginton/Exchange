@@ -2,16 +2,13 @@
 
 /* IMPORT MODULES */
 const Router = require('koa-router')
-const User = require('../services/user/modules/user')
 
 /* SETUP ROUTER */
 const router = new Router()
 
 router.get('/', async ctx => {
-	if (ctx.session.authenticated === true) {
-		const user = await new User()
-		const userDetails = await user.getDetails(ctx.session.id)
-		await ctx.render('home', {user: userDetails})
+	if (ctx.state.authenticated === true) {
+		await ctx.render('home')
 	} else await ctx.render('home')
 })
 
