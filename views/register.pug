@@ -3,7 +3,6 @@ html(lang='en')
 	include includes/head.pug
 	head
 		link(rel = 'stylesheet', href = '/stylesheet/controls')
-		script(src="scripts/fileUpload.js")
 		title Exchange - Register
 	body
 		main
@@ -24,8 +23,9 @@ html(lang='en')
 					input.textbox(type='password', name='password', required)
 					label(for="password") New password
 				.group
-					input.file(type='file', name='avatar', onchange="subFileName(this)", required)
+					input.file#file(type='file', name='avatar', required)
 					p.fileName#fileName
 					label(for="avatar") Upload Avatar
 				.group
 					button.button.greenButton(type='submit') Register
+	script(src="scripts/fileUpload.js")
