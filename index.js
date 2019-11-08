@@ -15,6 +15,9 @@ const Views = require('koa-views')
 const HomeRouter = require('./routes/home')
 const StylesheetRouter = require('./routes/stylesheet')
 
+/* IMPORT MIDDLEWARE */
+const Authentication = require('./middleware/authentication')
+
 /* IMPORT SERVICES */
 const UserService = require('./services/user')
 
@@ -29,6 +32,7 @@ app.use(Body({multipart: true}))
 app.use(BodyParser())
 app.use(Session(app))
 app.use(Logger())
+app.use(Authentication)
 
 /* SETUP GLOBAL ROUTES */
 app.use(HomeRouter.routes())
