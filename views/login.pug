@@ -1,0 +1,24 @@
+doctype html5
+html(lang='en')
+	include includes/head.pug
+	head
+		link(rel = 'stylesheet', href = '/stylesheet/controls')
+		script(src="scripts/fileUpload.js")
+		title Exchange - Login
+	body
+		main
+			include includes/banner.pug
+			h1 Welcome
+			h2 login to start exchanging
+			if error
+				.error
+					p=error.message
+			form(method='POST', action='/login', enctype="multipart/form-data", autocomplete="off")
+				.group
+					input.textbox(type='email', name='email', required)
+					label(for="email") Your email
+				.group
+					input.textbox(type='password', name='password', required)
+					label(for="password") Password
+				.group
+					button.button.greenButton(type='submit') Login

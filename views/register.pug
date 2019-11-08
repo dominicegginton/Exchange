@@ -1,0 +1,31 @@
+doctype html5
+html(lang='en')
+	include includes/head.pug
+	head
+		link(rel = 'stylesheet', href = '/stylesheet/controls')
+		title Exchange - Register
+	body
+		main
+			include includes/banner.pug
+			h1 Welcome
+			h2 register to get started
+			if error
+				.error
+					p=error.message
+			form(method='POST', action='/register', enctype="multipart/form-data", autocomplete="off")
+				.group
+					input.textbox(type='text' name='name' required)
+					label(for="name") Your name
+				.group
+					input.textbox(type='email', name='email', required)
+					label(for="email") Your email
+				.group
+					input.textbox(type='password', name='password', required)
+					label(for="password") New password
+				.group
+					input.file#file(type='file', name='avatar', required)
+					p.fileName#fileName
+					label(for="avatar") Upload Avatar
+				.group
+					button.button.greenButton(type='submit') Register
+	script(src="scripts/fileUpload.js")

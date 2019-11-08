@@ -1,7 +1,12 @@
 {
-  "name": "10_auth",
-  "version": "1.1.3",
-  "description": "A simple dynamic website template to be used as the base for various projects",
+  "name": "exchange",
+  "version": "0.0.1",
+  "description": "exchange website",
+  "repository": {
+	"type" : "git",
+	"url" : "https://github.coventry.ac.uk/340CT-1920SEPJAN/eggintod.git"
+  },
+  "homepage": "https://github.coventry.ac.uk/340CT-1920SEPJAN/eggintod#readme",
   "main": "index.js",
   "engines": {
     "node": "12.x"
@@ -10,6 +15,7 @@
     "start": "node index.js",
     "jsdoc": "node_modules/.bin/jsdoc -c jsdoc.conf",
     "linter": "node_modules/.bin/eslint .",
+    "test": "jest --coverage --detectOpenHandles --verbose",
     "unit": "./node_modules/.bin/jest --coverage 'unit tests/'"
   },
   "jest": {
@@ -17,7 +23,11 @@
       "<rootDir>/jest-test.config.js"
     ]
   },
-  "author": "",
+  "author": {
+    "name": "Dominic Egginton",
+    "email": "dominic.egginton@gmail.com",
+    "url": "https://dominicegginton.com"
+  },
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.6",
@@ -27,6 +37,9 @@
     "koa": "^2.6.2",
     "koa-body": "^4.0.8",
     "koa-bodyparser": "^4.2.1",
+    "koa-compose": "^4.1.0",
+    "koa-logger": "^3.2.1",
+    "koa-pug": "^4.0.2",
     "koa-router": "^7.4.0",
     "koa-session": "^5.10.1",
     "koa-static": "^5.0.0",
@@ -34,11 +47,13 @@
     "markdown": "^0.5.0",
     "markdownlint-cli": "^0.18.0",
     "mime-types": "^2.1.22",
+    "node-sass": "^4.13.0",
+    "pg": "^7.12.1",
     "remark-cli": "^7.0.0",
     "remark-lint": "^6.0.5",
     "remark-preset-lint-markdown-style-guide": "^2.1.3",
     "remark-preset-lint-recommended": "^3.0.3",
-    "sqlite-async": "^1.0.12"
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^5.15.2",
@@ -47,6 +62,8 @@
     "jest": "^24.1.0",
     "jsdoc": "^3.6.3",
     "jsdoc-route-plugin": "^0.1.0",
-    "markdownlint": "^0.17.0"
+    "markdownlint": "^0.17.0",
+    "mock-fs": "^4.10.3",
+    "sqlite-async": "^1.0.12"
   }
 }

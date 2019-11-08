@@ -1,0 +1,88 @@
+@import includes/vars
+
+form
+	margin: 50 0 0 0
+	.group
+		position: relative
+		margin: 0 0 35 0
+		@media screen and (max-width: $pageWidth)
+				margin: 0 0 25 0
+		label
+			color: $black
+			font-size: 1rem
+			font-weight: normal
+			position: absolute
+			pointer-events: none
+			left: 5
+			top: 5
+			opacity: 0.5
+			transition: 0.2s ease all
+			-moz-transition: 0.2s ease all
+			-webkit-transition: 0.2s ease all
+			@media screen and (max-width: $pageWidth)
+				top: 10
+	input
+		width: 400
+		height: 25
+		@media screen and (max-width: $pageWidth)
+			width: 100%
+	.textbox
+		padding: 20 20 20 5
+		display: block
+		font-size: 1rem
+		border: none
+		outline: none
+		color: $black
+		opacity: 0.5
+		border-bottom: 1px solid $black
+		transition: 0.2s ease
+	.textbox:valid
+		outline: none
+		~ label
+			top: -25
+			opacity: 1
+			font-size: 0.8rem
+			@media screen and (max-wdith: $pageWidth)
+				top: -15
+	.textbox:focus
+		outline: none
+		opacity: 1
+		~ label
+			top: -25
+			opacity: 1
+			font-size: 0.8rem
+			@media screen and (max-width: $pageWidth)
+				top: -15
+	.file
+		outline: none
+		opacity: 0
+		z-index: 100
+		cursor: pointer
+	.fileName
+		padding: 0 0 0 5
+		position: absolute
+		top: 5
+		z-index: -100
+	.file:valid
+		~ .fileName
+			opacity: 0.5
+		~ label
+			top: -25
+			opacity: 1
+			font-size: 0.8rem
+			@media screen and (max-width: $pageWidth)
+				top: -15
+
+.button
+	padding: 0 0 0 0
+	margin: 20 0 20 0
+	color: $black
+	background: none
+	border: none
+	border-radius: 10px
+	font-size: 1rem
+	font-family: $font-family
+	transition: all 0.2s ease-in-out
+.button:hover
+	color: $green
+

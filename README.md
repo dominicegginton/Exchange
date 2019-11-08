@@ -1,24 +1,43 @@
+# Exchange
 
-# Assignment Template
-This repository contains the base files for the assignment. You will need to create a _private duplicate_ in your module organisation. Carry out the following steps, taken from the [GitHub documentation](https://help.github.com/en/enterprise/2.16/user/articles/duplicating-a-repository):
+> A dynamic website built with `Koa` allowing users to exchange items
 
-Temporarily clone this repository to your development computer. This will create a directory on your computer called `temp` which contains the repository files:
+## Assignment Question
 
-`git clone https://github.coventry.ac.uk/web/template-dynamic-websites.git temp`
+Users should be able to login and post a list of items they want to exchange:
+Packages: sharp, nodemailer.
 
-Create a new **private** repository in the module organisation on the GitHub server and copy the _clone url_ to the clipboard (the one that begins with `https://` and ends in `.git`. The repository name should be your username (the one you use to log into the University computers).
+## Basic
 
-Mirror Push to this new repository, replacing xxx with the url from the clipboard making sure you are _in_ the `temp/` directory:
+A simple website to share details of items to be swapped.
 
-`cd temp/ && git push --mirror xxx`
+1. Without logging in visitors can view the items (thumbnail and description) that users want to swap.
+2. When logged in they can create their own list of items to swap, this should include:
+    1. Short description.
+    2. Uploaded photo.
+    3. List of the items they are looking to swap for.
+3. When logged in, a user can click on an item to see a page that shows:
+    1. The item details
+    2. The details of the user wanting to swap
+    3. The list of items they want to swap for.
 
-Once you are sure the code is in your new repository, delete the temporary local repository.
+## Intermediate
 
-`cd .. && rm -rf temp/`
-Your private repository on GitHub will now contain a complete copy of this template including the commits that were already made. You can now start your assignment by carrying out the following steps:
+This step adds features that improve the site's GDPR compliance.
 
-Clone your private repository
+1. The item details page should not display any personally-identifiable details such as the user's name or email address or profile picture.
+2. The details page should display a dropdown list containing the items the viewing user want to swap.
+3. Clicking on the 'make an offer' should automatically send an email (without using the email client) that contains:
+    1. The details of the person making the offer.
+    2. The item they want.
+    3. The item they are willing to swap.
 
-Change your [local config settings](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup). This is a vital step otherwise your commits won't show on the GitHub _graph_ and your grade will be affected.
+## Advanced
 
-Start working on the assignment. Remember to install all the dependencies listed in the `package.json` file.
+The final step is to build an auto-suggestion feature to make it easier for the users to find someone willing to swap.
+
+1. The site should include a full-text search for items people are looking for.
+2. Users should create the list of items they want to swap for by choosing from a dropdown list and clicking an 'add' button. If the item is not in the list they can enter it manually.
+3. The system should analyse the items the person wants, compare it to the items people want to swap and automatically suggest the swaps by sending out an automatic email to both parties.
+4. Each item the person wants to swap should have a 'suggested swaps' link that takes them to a page that suggests who might be willing to swap and for what, including pictures.
+5. This should include the 'make an offer' button.

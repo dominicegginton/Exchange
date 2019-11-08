@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  server:
+    image: exchange
+    build: .
+    environment:
+      NODE_ENV: production
+      USER_DB_HOST: db_user
+    env_file:
+      - .env
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    volumes:
+      - avatarData:/usr/src/app/data/avatars
+  
+  db_user:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${USER_DB_DATABASE}
+      POSTGRES_USER: ${USER_DB_USER} 
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
+      POSTGRES_PORT: ${USER_DB_PORT}
+    volumes:
+     - userData:/var/lib/postgresql/data
+
+volumes:
+  avatarData:
+  userData:
