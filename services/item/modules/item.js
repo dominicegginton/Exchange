@@ -11,11 +11,11 @@ class Item {
 	constructor() {
 		return (async() => {
 			this.database = new Client({
-				user: process.env.ITEM_DB_USER,
-				host: process.env.ITEM_DB_HOST,
-				database: process.env.ITEM_DB_DATABASE,
-				password: process.env.ITEM_DB_PASSWORD,
-				port: process.env.ITEM_DB_PORT,
+				user: process.env.EXCHANGE_DB_ITEM_USERNAME,
+				host: process.env.EXCHANGE_DB_ITEM_HOST,
+				database: process.env.EXCHANGE_DB_ITEM_DATABASE,
+				password: process.env.EXCHANGE_DB_ITEM_PASSWORD,
+				port: process.env.EXCHANGE_DB_ITEM_PORT,
 			})
 			await this.database.connect()
 			await this.database.query(`CREATE TABLE IF NOT EXISTS Items

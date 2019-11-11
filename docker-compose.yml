@@ -3,51 +3,54 @@ version: '3.7'
 services:
   server:
     image: exchange
+    container_name: exchange_server
     build: .
     environment:
       NODE_ENV: production
-      USER_DB_HOST: db_user
-      ITEM_DB_HOST: db_item
+      EXCHANGE_DB_USER_PORT: 5432
+      EXCHANGE_DB_USER_HOST: db_user
+      EXCHANGE_DB_ITEM_PORT: 5432
+      EXCHANGE_DB_ITEM_HOST: db_item
     env_file:
       - .env
     depends_on:
       - db_user
       - db_item
     ports:
-      - ${APP_PORT}:${APP_PORT}
+      - ${EXCHANGE_SERVER_PORT}:${EXCHANGE_SERVER_PORT}
     volumes:
-      - imageData:/usr/src/app/data
+      - server_image_data:/usr/src/app/data
     networks:
     - exchange
   
   db_user:
     image: postgres
+    container_name: exchange_db_user
     environment:
-      POSTGRES_DB: ${USER_DB_DATABASE}
-      POSTGRES_USER: ${USER_DB_USER} 
-      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
-      POSTGRES_PORT: ${USER_DB_PORT}
+      POSTGRES_DB: ${EXCHANGE_DB_USER_DATABASE}
+      POSTGRES_USER: ${EXCHANGE_DB_USER_USERNAME} 
+      POSTGRES_PASSWORD: ${EXCHANGE_DB_USER_PASSWORD}
     volumes:
-     - userData:/var/lib/postgresql/data
+     - db_user_data:/var/lib/postgresql/data
     networks: 
       - exchange
   
   db_item:
     image: postgres
+    container_name: exchange_db_item
     environment:
-      POSTGRES_DB: ${ITEM_DB_DATABASE}
-      POSTGRES_USER: ${ITEM_DB_USER} 
-      POSTGRES_PASSWORD: ${ITEM_DB_PASSWORD}
-      POSTGRES_PORT: ${ITEM_DB_PORT}
+      POSTGRES_DB: ${EXCHANGE_DB_ITEM_DATABASE}
+      POSTGRES_USER: ${EXCHANGE_DB_ITEM_USERNAME} 
+      POSTGRES_PASSWORD: ${EXCHANGE_DB_ITEM_PASSWORD}
     volumes:
-     - itemData:/var/lib/postgresql/data
+     - db_item_data:/var/lib/postgresql/data
     networks: 
       - exchange
 
 volumes:
-  imageData:
-  userData:
-  itemData:
+  server_image_data:
+  db_user_data:
+  db_item_data:
 
 networks:
   exchange:

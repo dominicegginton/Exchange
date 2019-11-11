@@ -45,7 +45,7 @@ app.use(ItemService)
 
 /* SETUP PORT */
 const defaultPort = 8080
-const port = process.env.APP_PORT || defaultPort
+const port = process.env.EXCHANGE_SERVER_PORT || defaultPort
 
 /* RUN APP */
 module.exports = app.listen(port, async() => console.log(`Server started on port ${port}`))

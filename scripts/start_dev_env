@@ -1,15 +1,16 @@
 #!/bin/sh
 
-export USER_DB_USER=user
-export USER_DB_PASSWORD=password
-export USER_DB_DATABASE=exchange_dev_db_user
-export USER_DB_PORT=9911
+export EXCHANGE_DB_USER_USERNAME=user
+export EXCHANGE_DB_USER_PASSWORD=password
+export EXCHANGE_DB_USER_DATABASE=exchange_dev_db_user
+export EXCHANGE_DB_USER_PORT=9911
 
-export ITEM_DB_USER=user
-export ITEM_DB_PASSWORD=password
-export ITEM_DB_DATABASE=exchange_dev_db_item
-export ITEM_DB_PORT=9922
+export EXCHANGE_DB_ITEM_USERNAME=user
+export EXCHANGE_DB_ITEM_PASSWORD=password
+export EXCHANGE_DB_ITEM_DATABASE=exchange_dev_db_item
+export EXCHANGE_DB_ITEM_PORT=9922
 
+echo '$EXCHANGE_DB_USER_USERNAME'
 trap remove_dev_db INT
 
 function remove_dev_db() {

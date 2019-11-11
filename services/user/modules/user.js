@@ -14,11 +14,11 @@ class User {
 	constructor() {
 		return (async() => {
 			this.database = new Client({
-				user: process.env.USER_DB_USER,
-				host: process.env.USER_DB_HOST,
-				database: process.env.USER_DB_DATABASE,
-				password: process.env.USER_DB_PASSWORD,
-				port: process.env.USER_DB_PORT,
+				user: process.env.EXCHANGE_DB_USER_USERNAME,
+				host: process.env.EXCHANGE_DB_USER_HOST,
+				database: process.env.EXCHANGE_DB_USER_DATABASE,
+				password: process.env.EXCHANGE_DB_USER_PASSWORD,
+				port: process.env.EXCHANGE_DB_USER_PORT,
 			})
 			await this.database.connect()
 			await this.database.query(`CREATE TABLE IF NOT EXISTS Users 
