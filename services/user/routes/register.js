@@ -6,6 +6,7 @@ const User = require('../modules/user')
 
 /* SETUP ROUTER */
 const router = new Router()
+router.prefix('/user')
 
 router.get('/register', async ctx => {
 	await ctx.render('register')

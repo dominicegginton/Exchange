@@ -6,6 +6,7 @@ const FileSystem = require('fs-extra')
 
 /* SETUP ROUTER */
 const router = new Router()
+router.prefix('/user')
 
 router.get('/avatar/:fileName', ctx => {
 	const fileName = ctx.params.fileName
