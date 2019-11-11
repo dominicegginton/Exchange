@@ -53,6 +53,17 @@ class Item {
 			throw error
 		}
 	}
+
+	async getDetails(itemId) {
+		try {
+			const sql = `SELECT * FROM Items WHERE id='${itemId}'`
+			const result = await this.database.query(sql)
+			if (!!result.rows[0]) return result.rows[0]
+			else throw new Error('Invalid item id')
+		} catch (error) {
+			throw error
+		}
+	}
 }
 
 module.exports = Item

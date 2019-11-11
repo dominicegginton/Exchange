@@ -132,3 +132,43 @@ describe('uploadImage()', () => {
 		done()
 	})
 })
+
+describe('getDetails()', () => {
+
+	beforeEach(async() => {
+		const newItem = {name: 'test', description: 'testing', userId: GenerateId()}
+		this.itemId = await this.item.new(newItem)
+	})
+
+	test('get details for valid item', async done => {
+		expect.assertions(6)
+		const itemDetails = await this.item.getDetails(this.itemId)
+		expect(typeof itemDetails).toBe('object')
+		expect(itemDetails.name).toBe('test')
+		expect(itemDetails.description).toBe('testing')
+		expect(typeof itemDetails.userId).toBe('string')
+		expect(itemDetails.userId.length).toBe(36)
+		expect(itemDetails.image).toBe(null)
+		done()
+	})
+
+	test('get details for valid user when more than one user is registered', async done => {
+		expect.assertions(6)
+		const newItem = {name: 'foo', description: 'testing another item', userId: GenerateId()}
+		const newItemId = await this.item.new(newItem)
+		const itemDetails = await this.item.getDetails(newItemId)
+		expect(typeof itemDetails).toBe('object')
+		expect(itemDetails.name).toBe('foo')
+		expect(itemDetails.description).toBe('testing another item')
+		expect(typeof itemDetails.userId).toBe('string')
+		expect(itemDetails.userId.length).toBe(36)
+		expect(itemDetails.image).toBe(null)
+		done()
+	})
+
+	test('get details for invalid item id should error', async done => {
+		expect.assertions(1)
+		await expect(this.item.getDetails('invlaid-id')).rejects.toEqual(Error('Invalid item id'))
+		done()
+	})
+})
