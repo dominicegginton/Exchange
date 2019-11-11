@@ -2,6 +2,8 @@
 
 /* IMPORT MODULES */
 const {Client} = require('pg')
+const Mime = require('mime-types')
+const FileSystem = require('fs-extra')
 const GenerateId = require('../../../utils/generateId')
 const Validate = require('../../../utils/validate')
 
@@ -31,6 +33,22 @@ class Item {
 			('${id}', '${newItem.name}', '${newItem.description}', '${newItem.userId}');`
 			await this.database.query(sql)
 			return id
+		} catch (error) {
+			throw error
+		}
+	}
+
+	async uploadImage(itemId, image) {
+		try {
+			Validate(image, ['path', 'type', 'size'])
+			if (image.size === 0) return
+			const {path, type} = image
+			const fileExtension = Mime.extension(type)
+			const fileName = `${GenerateId()}.${fileExtension}`
+			await FileSystem.copy(path, `data/images/${fileName}`)
+			const sql = `UPDATE Items SET image='${fileName}' WHERE id='${itemId}'`
+			await this.database.query(sql)
+			return fileName
 		} catch (error) {
 			throw error
 		}

@@ -17,8 +17,10 @@ router.post('/item/new', async ctx => {
 	if (!!ctx.state.user) {
 		const newItem = ctx.request.body
 		newItem.userId = ctx.state.user.id
+		const newItemImage = ctx.request.files.image
 		const item = await new Item()
-		await item.new(newItem)
+		const newItemId = await item.new(newItem)
+		await item.uploadImage(newItemId, newItemImage)
 		ctx.redirect('/user')
 	} else ctx.redirect('/')
 })
