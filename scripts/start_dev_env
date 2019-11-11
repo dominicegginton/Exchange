@@ -1,0 +1,38 @@
+#!/bin/sh
+
+export USER_DB_USER=user
+export USER_DB_PASSWORD=password
+export USER_DB_DATABASE=exchange_dev_db_user
+export USER_DB_PORT=9911
+
+export ITEM_DB_USER=user
+export ITEM_DB_PASSWORD=password
+export ITEM_DB_DATABASE=exchange_dev_db_item
+export ITEM_DB_PORT=9922
+
+trap remove_dev_db INT
+
+function remove_dev_db() {
+	echo ``
+	echo '> Removing Database exchange_dev_db_user'
+	docker stop exchange_dev_db_user
+	docker rm exchange_dev_db_user
+
+	echo '> Removing Database exchange_dev_db_item'
+	docker stop exchange_dev_db_item
+	docker rm exchange_dev_db_item
+	exit
+}
+
+echo '> Creating Database volume exchange_dev_db_user'
+docker volume create exchange_dev_db_user_data
+echo '> Creating Database volume exchange_dev_db_item'
+docker volume create exchange_dev_db_item_data
+
+echo '> Starting Database exchange_dev_db_user'
+docker run --name exchange_dev_db_user -p 9911:5432 -v exchange_dev_db_user_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_user -d postgres
+echo '> Starting Database exchange_dev_db_item'
+docker run --name exchange_dev_db_item -p 9922:5432 -v exchange_dev_db_item_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_item -d postgres
+
+echo '> Starting Node.js Server'
+node index.js
