@@ -17,6 +17,8 @@ services:
       - ${APP_PORT}:${APP_PORT}
     volumes:
       - imageData:/usr/src/app/data
+    networks:
+    - exchange
   
   db_user:
     image: postgres
@@ -27,6 +29,8 @@ services:
       POSTGRES_PORT: ${USER_DB_PORT}
     volumes:
      - userData:/var/lib/postgresql/data
+    networks: 
+      - exchange
   
   db_item:
     image: postgres
@@ -37,8 +41,13 @@ services:
       POSTGRES_PORT: ${ITEM_DB_PORT}
     volumes:
      - itemData:/var/lib/postgresql/data
+    networks: 
+      - exchange
 
 volumes:
   imageData:
   userData:
   itemData:
+
+networks:
+  exchange:
