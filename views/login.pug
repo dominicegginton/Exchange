@@ -13,7 +13,7 @@ html(lang='en')
 			if error
 				.error
 					p=error.message
-			form(method='POST', action='/login', enctype="multipart/form-data", autocomplete="off")
+			form(method='POST', action='/user/login', enctype="multipart/form-data", autocomplete="off")
 				.group
 					input.textbox(type='email', name='email', required)
 					label(for="email") Your email

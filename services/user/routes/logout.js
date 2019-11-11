@@ -5,6 +5,7 @@ const Router = require('koa-router')
 
 /* SETUP ROUTER */
 const router = new Router()
+router.prefix('/user')
 
 router.get('/logout', async ctx => {
 	if (ctx.session.authenticated === true) {
