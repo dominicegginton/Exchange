@@ -7,14 +7,16 @@ services:
     environment:
       NODE_ENV: production
       USER_DB_HOST: db_user
+      ITEM_DB_HOST: db_item
     env_file:
       - .env
     depends_on:
       - db_user
+      - db_item
     ports:
       - ${APP_PORT}:${APP_PORT}
     volumes:
-      - avatarData:/usr/src/app/data/avatars
+      - imageData:/usr/src/app/data
   
   db_user:
     image: postgres
@@ -25,7 +27,18 @@ services:
       POSTGRES_PORT: ${USER_DB_PORT}
     volumes:
      - userData:/var/lib/postgresql/data
+  
+  db_item:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${ITEM_DB_DATABASE}
+      POSTGRES_USER: ${ITEM_DB_USER} 
+      POSTGRES_PASSWORD: ${ITEM_DB_PASSWORD}
+      POSTGRES_PORT: ${ITEM_DB_PORT}
+    volumes:
+     - itemData:/var/lib/postgresql/data
 
 volumes:
-  avatarData:
+  imageData:
   userData:
+  itemData:
