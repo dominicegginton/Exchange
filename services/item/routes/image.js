@@ -7,6 +7,8 @@ const FileSystem = require('fs-extra')
 /* SETUP ROUTER */
 const router = new Router()
 
+router.prefix('/item')
+
 router.get('/image/:fileName', ctx => {
 	const fileName = ctx.params.fileName
 	if(FileSystem.existsSync(`./data/images/${fileName}`)) {
