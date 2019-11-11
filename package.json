@@ -3,8 +3,8 @@
   "version": "0.0.2",
   "description": "exchange website",
   "repository": {
-	"type" : "git",
-	"url" : "https://github.coventry.ac.uk/340CT-1920SEPJAN/eggintod.git"
+    "type": "git",
+    "url": "https://github.coventry.ac.uk/340CT-1920SEPJAN/eggintod.git"
   },
   "homepage": "https://github.coventry.ac.uk/340CT-1920SEPJAN/eggintod#readme",
   "main": "index.js",
@@ -12,7 +12,9 @@
     "node": "12.x"
   },
   "scripts": {
-    "start": "node index.js",
+	"start": "node index.js",
+	"start:dev": "./scripts/start_dev_env",
+	"clean:dev": "./scripts/clean_dev_env",
     "jsdoc": "node_modules/.bin/jsdoc -c jsdoc.conf",
     "linter": "node_modules/.bin/eslint .",
     "test": "jest --coverage --detectOpenHandles --verbose",
