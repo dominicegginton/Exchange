@@ -21,7 +21,15 @@ router.post('/item/new', async ctx => {
 		const item = await new Item()
 		const newItemId = await item.new(newItem)
 		await item.uploadImage(newItemId, newItemImage)
-		ctx.redirect('/user')
+		ctx.redirect(`/item/${newItemId}`)
+	} else ctx.redirect('/')
+})
+
+router.get('/item/:itemId', async ctx => {
+	if (!!ctx.state.user) {
+		const item = await new Item()
+		const itemDetails = await item.getDetails(ctx.params.itemId)
+		await ctx.render('item', {item: itemDetails})
 	} else ctx.redirect('/')
 })
 
