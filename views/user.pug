@@ -3,11 +3,18 @@ html(lang='en')
 	include includes/head.pug
 	head
 		link(rel = 'stylesheet', href = '/stylesheet/user')
+		link(rel ='stylesheet', href = '/stylesheet/item')
+		link(rel = 'stylesheet', href = '/stylesheet/controls')
 		title='Exchange - ' + user.name
 	body
 		main
 			include includes/banner.pug
-			.largeAvatar
-				img(src='/user/avatar/' + user.avatar)
 			h1=user.name
 			h2=user.email
+			.my_items
+				.inline_header_button
+					h3 My Items
+					.separator
+					a(href="/item/new") New
+				#my_items
+	script(src="/scripts/user.js")

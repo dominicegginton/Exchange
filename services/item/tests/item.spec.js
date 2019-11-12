@@ -172,3 +172,42 @@ describe('getDetails()', () => {
 		done()
 	})
 })
+
+describe('getUsersItems()', () => {
+
+	beforeEach(async() => {
+		this.userId = GenerateId()
+	})
+
+	test('get users items should return valid item', async done => {
+		expect.assertions(6)
+		const newItem = {name: 'test', description: 'testing', userId: this.userId}
+		const newItemId = await this.item.new(newItem)
+		const userItems = await this.item.getUsersItems(this.userId)
+		expect(userItems.length).toBe(1)
+		expect(typeof userItems[0]).toBe('object')
+		expect(userItems[0].id).toBe(newItemId)
+		expect(userItems[0].name).toBe('test')
+		expect(userItems[0].description).toBe('testing')
+		expect(userItems[0].userId).toBe(this.userId)
+		done()
+	})
+
+	test('get users items should return valid items', async done => {
+		expect.assertions(1)
+		const newItem1 = {name: 'test', description: 'testing', userId: this.userId}
+		const newItem2 = {name: 'foo', description: 'foo testing', userId: this.userId}
+		await this.item.new(newItem1)
+		await this.item.new(newItem2)
+		const userItems = await this.item.getUsersItems(this.userId)
+		expect(userItems.length).toBe(2)
+		done()
+	})
+
+	test('get users items should return empty array for user with no items', async done => {
+		expect.assertions(1)
+		const userItems = await this.item.getUsersItems(this.userId)
+		expect(userItems.length).toBe(0)
+		done()
+	})
+})

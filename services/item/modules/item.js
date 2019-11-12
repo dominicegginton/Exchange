@@ -64,6 +64,12 @@ class Item {
 			throw error
 		}
 	}
+
+	async getUsersItems(userId) {
+		const sql = `SELECT * FROM Items WHERE userId='${userId}';`
+		const result = await this.database.query(sql)
+		return result.rows
+	}
 }
 
 module.exports = Item
