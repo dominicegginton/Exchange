@@ -4,6 +4,7 @@
 const {Client} = require('pg')
 const Mime = require('mime-types')
 const FileSystem = require('fs-extra')
+const Sharp = require('sharp')
 const GenerateId = require('../../../utils/generateId')
 const Validate = require('../../../utils/validate')
 
@@ -40,12 +41,16 @@ class Item {
 
 	async uploadImage(itemId, image) {
 		try {
-			Validate(image, ['path', 'type', 'size'])
-			if (image.size === 0) return
+			Validate(image, ['path', 'type'])
 			const {path, type} = image
+			if (!await FileSystem.exists(path)) throw new Error('image not found')
+			const fileStats = await FileSystem.stat(path)
+			if (fileStats.size === 0) throw new Error('image size too small')
 			const fileExtension = Mime.extension(type)
 			const fileName = `${GenerateId()}.${fileExtension}`
-			await FileSystem.copy(path, `data/images/${fileName}`)
+			const imageSize = {width: 900, height: 500}
+			await FileSystem.ensureDir('data/images/')
+			await Sharp(path).resize(imageSize).png().toFile(`data/images/${fileName}`)
 			const sql = `UPDATE Items SET image='${fileName}' WHERE id='${itemId}'`
 			await this.database.query(sql)
 			return fileName
