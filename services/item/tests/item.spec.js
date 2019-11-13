@@ -5,11 +5,12 @@ const Item = require('../modules/item')
 
 /* IMPORT MODULES */
 const MockFS = require('mock-fs')
-const FileSystem = require('fs-extra')
+const Sharp = require('sharp')
 const GenerateId = require('../../../utils/generateId')
 
-/* MOCK POSTGRES */
+/* MOCK MODULES */
 jest.mock('pg')
+jest.mock('sharp')
 
 beforeEach( async() => {
 	this.item = await new Item()
@@ -78,7 +79,8 @@ describe('uploadImage()', () => {
 			'data/images/': { /* EMPTY DIRECTORY */ },
 			'test/': {
 				'image1.png': Buffer.from([10, 4, 6, 7, 7, 9, 4]),
-				'image2.jpeg': Buffer.from([54, 8, 5, 5, 7, 7, 9])
+				'image2.jpeg': Buffer.from([54, 8, 5, 5, 7, 7, 9]),
+				'image3.jpeg': Buffer.from([])
 			}
 		})
 	})
@@ -87,48 +89,68 @@ describe('uploadImage()', () => {
 		MockFS.restore()
 	})
 
-	test('upload valid PNG', async done => {
-		expect.assertions(1)
-		const fileName = await this.item.uploadImage(this.id, {path: 'test/image1.png', type: 'image/png', size: 1})
-		expect(await FileSystem.exists(`data/images/${fileName}`)).toBe(true)
+	test('upload image as valid PNG', async done => {
+		expect.assertions(3)
+		const fileName = await this.item.uploadImage(this.id, {path: 'test/image1.png', type: 'image/png'})
+		expect(Sharp().resize).toHaveBeenCalledWith({width: 900, height: 500})
+		expect(Sharp().png).toHaveBeenCalled()
+		expect(Sharp().toFile).toHaveBeenCalledWith(`data/images/${fileName}`)
 		done()
 	})
 
-	test('upload valid JPEG', async done => {
-		expect.assertions(1)
-		const fileName = await this.item.uploadImage(this.id, {path: 'test/image2.jpeg', type: 'image/jpeg', size: 1})
-		expect(await FileSystem.exists(`data/images/${fileName}`)).toBe(true)
+	test('upload image as valid JPEG', async done => {
+		expect.assertions(3)
+		const fileName = await this.item.uploadImage(this.id, {path: 'test/image2.jpeg', type: 'image/jpeg'})
+		expect(Sharp().resize).toHaveBeenCalledWith({width: 900, height: 500})
+		expect(Sharp().png).toHaveBeenCalled()
+		expect(Sharp().toFile).toHaveBeenCalledWith(`data/images/${fileName}`)
 		done()
 	})
-
-	test('upload with size of 0 should return undefined', async done => {
-		expect.assertions(1)
-		const fileName = await this.item.uploadImage(this.id, {path: 'test/image2.jpeg', type: 'image/jpeg', size: 0})
-		expect(typeof fileName).toBe('undefined')
-		done()
-	})
-
-	test('upload with no path should error', async done => {
+	test('upload image with size of 0 should error', async done => {
 		expect.assertions(1)
 		await expect(
-			this.item.uploadImage(this.id,{type: 'image/png', size: 1})
+			this.item.uploadImage(this.id, {path: 'test/image3.jpeg', type: 'image/jpeg'})
+		).rejects.toEqual(Error('image size too small'))
+		done()
+	})
+
+	test('upload image where path does not exist should error', async done => {
+		expect.assertions(1)
+		await expect(
+			this.item.uploadImage(this.id, {path: 'test/image4.jpeg', type: 'image/jpeg'})
+		).rejects.toEqual(Error('image not found'))
+		done()
+	})
+
+	test('upload image with no path should error', async done => {
+		expect.assertions(1)
+		await expect(
+			this.item.uploadImage(this.id,{type: 'image/png'})
 		).rejects.toEqual(Error('path is empty'))
 		done()
 	})
 
-	test('upload with no type should error', async done => {
+	test('upload image with empty path should error', async done => {
 		expect.assertions(1)
 		await expect(
-			this.item.uploadImage(this.id,{path: 'test/avatar1.png', size: 1})
+			this.item.uploadImage(this.id,{path: '', type: 'image/png'})
+		).rejects.toEqual(Error('path is empty'))
+		done()
+	})
+
+	test('upload image with no type should error', async done => {
+		expect.assertions(1)
+		await expect(
+			this.item.uploadImage(this.id,{path: 'test/image1.png'})
 		).rejects.toEqual(Error('type is empty'))
 		done()
 	})
 
-	test('upload with no size should error', async done => {
+	test('upload image with empty type should error', async done => {
 		expect.assertions(1)
 		await expect(
-			this.item.uploadImage(this.id, {path: 'test/avatar2.jpeg', type: 'image/jpeg'})
-		).rejects.toEqual(Error('size is empty'))
+			this.item.uploadImage(this.id,{path: 'test/image1.png', type: ''})
+		).rejects.toEqual(Error('type is empty'))
 		done()
 	})
 })

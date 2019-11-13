@@ -5,6 +5,7 @@ const {Client} = require('pg')
 const Bcrypt = require('bcrypt-promise')
 const Mime = require('mime-types')
 const FileSystem = require('fs-extra')
+const Sharp = require('sharp')
 const GenerateId = require('../../../utils/generateId')
 const Validate = require('../../../utils/validate')
 
@@ -62,12 +63,16 @@ class User {
 
 	async uploadAvatar(userId, avatar) {
 		try {
-			Validate(avatar, ['path', 'type', 'size'])
-			if (avatar.size === 0) return
+			Validate(avatar, ['path', 'type'])
 			const {path, type} = avatar
+			if (!await FileSystem.exists(path)) throw new Error('image not found')
+			const fileStats = await FileSystem.stat(path)
+			if (fileStats.size === 0) throw new Error('image size too small')
 			const fileExtension = Mime.extension(type)
 			const fileName = `${GenerateId()}.${fileExtension}`
-			await FileSystem.copy(path, `data/avatars/${fileName}`)
+			const avatarSize = {width: 200, height: 200}
+			await FileSystem.ensureDir('data/avatars/')
+			await Sharp(path).resize(avatarSize).png().toFile(`data/avatars/${fileName}`)
 			const sql = `UPDATE Users SET avatar='${fileName}' WHERE id='${userId}'`
 			await this.database.query(sql)
 			return fileName
