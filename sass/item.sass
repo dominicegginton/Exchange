@@ -1,12 +1,14 @@
 @import includes/vars
 
-.item
+.item_container
 	h1
 		margin: 0 0 30 0
 	img
 		margin: 0 0 30 0
 		border-radius: 15px
 		width: 100%
+	.item_description
+		margin: 0 0 30 0
 
 .my_items
 	margin-top: 50
@@ -42,3 +44,25 @@
 	background: $green
 	transform: scale(1.05)
     color: $white
+
+.wishlist_item_container
+	background: $light_grey_background
+	border-radius: 10px
+	color: $white
+	width: 100%
+	padding: 20 20 20 20
+	margin: 1rem 0 1rem 0
+	transition: all 0.1s ease-in-out
+	.wishlist_item_name
+		font-weight: bold
+		font-size: 1.2rem
+		margin: 0 0 10 0
+	.wishlist_item_description
+	.wishlist_item_delete_button
+		display: inline-block
+		color: $grey
+	.wishlist_item_delete_button:hover
+		cursor: pointer
+		color: $red
+.wishlist_item_container:hover
+	transform: scale(1.02)

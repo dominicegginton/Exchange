@@ -21,6 +21,7 @@ const Authentication = require('./middleware/authentication')
 /* IMPORT SERVICES */
 const UserService = require('./services/user')
 const ItemService = require('./services/item')
+const WishlistService = require('./services/wishlist')
 
 /* SETUP KOA */
 const app = new Koa()
@@ -42,6 +43,7 @@ app.use(StylesheetRouter.routes())
 /* SETUP SERVICES */
 app.use(UserService)
 app.use(ItemService)
+app.use(WishlistService)
 
 /* SETUP PORT */
 const defaultPort = 8080
