@@ -35,6 +35,21 @@ class Wishlist {
 			throw error
 		}
 	}
+
+	async delete(deleteItem) {
+		try {
+			Validate(deleteItem, ['wishlist_item_id', 'user_id'])
+			let sql = `SELECT user_id FROM Wishlists Where id='${deleteItem.wishlist_item_id}';`
+			const result = await this.database.query(sql)
+			const data = result.rows[0]
+			if (data.user_id !== deleteItem.user_id) throw new Error('user does not own wishlist item')
+			sql = `DELETE FROM Wishlists WHERE id='${deleteItem.wishlist_item_id}';`
+			await this.database.query(sql)
+			return true
+		} catch (error) {
+			throw error
+		}
+	}
 }
 
 module.exports = Wishlist

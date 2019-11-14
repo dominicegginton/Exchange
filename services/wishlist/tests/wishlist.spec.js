@@ -81,3 +81,55 @@ describe('new()', () => {
 		done()
 	})
 })
+
+describe('delete()', () => {
+
+	beforeEach(async() => {
+		this.item_id = GenerateId()
+		this.user_id = GenerateId()
+		const newItem = {name: 'test', description: 'testing', item_id: this.item_id, user_id: this.user_id}
+		this.wishlist_item_id = await this.wishlist.new(newItem)
+	})
+
+	test('delete valid wishlist item should return true', async done => {
+		expect.assertions(1)
+		const deleteItem = {wishlist_item_id: this.wishlist_item_id, user_id: this.user_id}
+		expect(await this.wishlist.delete(deleteItem)).toBe(true)
+		done()
+	})
+
+	test('delete wishlist item with no itemId object should error', async done => {
+		expect.assertions(1)
+		const deleteItem = {user_id: this.user_id}
+		await expect(this.wishlist.delete(deleteItem)).rejects.toEqual(Error('wishlist_item_id is empty'))
+		done()
+	})
+
+	test('delete wishlist item with empty itemId should error', async done => {
+		expect.assertions(1)
+		const deleteItem = {wishlist_item_id: '', user_id: this.user_id}
+		await expect(this.wishlist.delete(deleteItem)).rejects.toEqual(Error('wishlist_item_id is empty'))
+		done()
+	})
+
+	test('delete wishlist item with no userId object should error', async done => {
+		expect.assertions(1)
+		const deleteItem = {wishlist_item_id: this.wishlist_item_id}
+		await expect(this.wishlist.delete(deleteItem)).rejects.toEqual(Error('user_id is empty'))
+		done()
+	})
+
+	test('delete wishlist item with empty userId should error', async done => {
+		expect.assertions(1)
+		const deleteItem = {wishlist_item_id: this.wishlist_item_id, user_id: ''}
+		await expect(this.wishlist.delete(deleteItem)).rejects.toEqual(Error('user_id is empty'))
+		done()
+	})
+
+	test('delete wishlist item that does not belong to user should error', async done => {
+		expect.assertions(1)
+		const deleteItem = {wishlist_item_id: this.wishlist_item_id, user_id: GenerateId()}
+		await expect(this.wishlist.delete(deleteItem)).rejects.toEqual(Error('user does not own wishlist item'))
+		done()
+	})
+})
