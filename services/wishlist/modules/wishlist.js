@@ -22,6 +22,19 @@ class Wishlist {
 			return this
 		})()
 	}
+
+	async new(newItem) {
+		try {
+			Validate(newItem, ['name', 'description', 'item_id', 'user_id'])
+			const id = GenerateId()
+			const sql = `INSERT INTO Wishlists (id, name, description, item_id, user_id) VALUES
+			('${id}', '${newItem.name}', '${newItem.description}', '${newItem.item_id}', '${newItem.user_id}');`
+			await this.database.query(sql)
+			return id
+		} catch (error) {
+			throw error
+		}
+	}
 }
 
 module.exports = Wishlist
