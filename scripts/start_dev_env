@@ -10,6 +10,11 @@ export EXCHANGE_DB_ITEM_PASSWORD=password
 export EXCHANGE_DB_ITEM_DATABASE=exchange_dev_db_item
 export EXCHANGE_DB_ITEM_PORT=9922
 
+export EXCHANGE_DB_WISHLIST_USERNAME=user
+export EXCHANGE_DB_WISHLIST_PASSWORD=password
+export EXCHANGE_DB_WISHLIST_DATABASE=exchange_dev_db_wishlist
+export EXCHANGE_DB_WISHLIST_PORT=9933
+
 echo '$EXCHANGE_DB_USER_USERNAME'
 trap remove_dev_db INT
 
@@ -22,18 +27,26 @@ function remove_dev_db() {
 	echo '> Removing Database exchange_dev_db_item'
 	docker stop exchange_dev_db_item
 	docker rm exchange_dev_db_item
+
+	echo '> Removing Database exchange_dev_db_wishlist'
+	docker stop exchange_dev_db_wishlist
+	docker rm exchange_dev_db_wishlist
 	exit
 }
 
-echo '> Creating Database volume exchange_dev_db_user'
+echo '> Creating Database volume exchange_dev_db_user_data'
 docker volume create exchange_dev_db_user_data
-echo '> Creating Database volume exchange_dev_db_item'
+echo '> Creating Database volume exchange_dev_db_item_data'
 docker volume create exchange_dev_db_item_data
+echo '> Creating Database volume exchange_dev_db_wishlist_data'
+docker volume create exchange_dev_db_wishlist_data
 
 echo '> Starting Database exchange_dev_db_user'
 docker run --name exchange_dev_db_user -p 9911:5432 -v exchange_dev_db_user_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_user -d postgres
 echo '> Starting Database exchange_dev_db_item'
 docker run --name exchange_dev_db_item -p 9922:5432 -v exchange_dev_db_item_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_item -d postgres
+echo '> Starting Database exchange_dev_db_wishlist'
+docker run --name exchange_dev_db_wishlist -p 9933:5432 -v exchange_dev_db_wishlist_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_wishlist -d postgres
 
 echo '> Starting Node.js Server'
 node index.js
