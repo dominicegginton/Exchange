@@ -4,14 +4,14 @@
 	.right
 		if user
 			.barButton
-				a(href='/logout') Logout
+				a(href='/user/logout') Logout
 			.separator
 			.avatar
 				a(href='/user')
-					img(src='/avatar/' + user.avatar)
+					img(src='/user/avatar/' + user.avatar)
 		else
 			.barButton
-				a(href='/login') Login
+				a(href='/user/login') Login
 			.separator
 			.barButton
-				a(href='/register') Register
+				a(href='/user/register') Register

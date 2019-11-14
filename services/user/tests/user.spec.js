@@ -5,10 +5,11 @@ const Users = require('../modules/user')
 
 /* IMPORT MODULES */
 const MockFS = require('mock-fs')
-const FileSystem = require('fs-extra')
+const Sharp = require('sharp')
 
-/* MOCK POSTGRES */
+/* MOCK MODULES */
 jest.mock('pg')
+jest.mock('sharp')
 
 beforeEach( async() => {
 	this.user = await new Users()
@@ -142,7 +143,8 @@ describe('uploadAvatar()', () => {
 			'data/avatars/': { /* EMPTY DIRECTORY */ },
 			'test/': {
 				'avatar1.png': Buffer.from([10, 4, 6, 7, 7, 9, 4]),
-				'avatar2.jpeg': Buffer.from([54, 8, 5, 5, 7, 7, 9])
+				'avatar2.jpeg': Buffer.from([54, 8, 5, 5, 7, 7, 9]),
+				'avatar3.jpeg': Buffer.from([])
 			}
 		})
 	})
@@ -151,48 +153,69 @@ describe('uploadAvatar()', () => {
 		MockFS.restore()
 	})
 
-	test('upload valid PNG', async done => {
-		expect.assertions(1)
-		const fileName = await this.user.uploadAvatar(this.id, {path: 'test/avatar1.png', type: 'image/png', size: 1})
-		expect(await FileSystem.exists(`data/avatars/${fileName}`)).toBe(true)
+	test('upload avatar image as valid PNG', async done => {
+		expect.assertions(3)
+		const fileName = await this.user.uploadAvatar(this.id, {path: 'test/avatar1.png', type: 'image/png'})
+		expect(Sharp().resize).toHaveBeenCalledWith({width: 200, height: 200})
+		expect(Sharp().png).toHaveBeenCalled()
+		expect(Sharp().toFile).toHaveBeenCalledWith(`data/avatars/${fileName}`)
 		done()
 	})
 
-	test('upload valid JPEG', async done => {
-		expect.assertions(1)
-		const fileName = await this.user.uploadAvatar(this.id, {path: 'test/avatar2.jpeg', type: 'image/jpeg', size: 1})
-		expect(await FileSystem.exists(`data/avatars/${fileName}`)).toBe(true)
+	test('upload  avatar image as valid JPEG', async done => {
+		expect.assertions(3)
+		const fileName = await this.user.uploadAvatar(this.id, {path: 'test/avatar2.jpeg', type: 'image/jpeg'})
+		expect(Sharp().resize).toHaveBeenCalledWith({width: 200, height: 200})
+		expect(Sharp().png).toHaveBeenCalled()
+		expect(Sharp().toFile).toHaveBeenCalledWith(`data/avatars/${fileName}`)
 		done()
 	})
 
-	test('upload with size of 0 should return undefined', async done => {
-		expect.assertions(1)
-		const fileName = await this.user.uploadAvatar(this.id, {path: 'test/avatar2.jpeg', type: 'image/jpeg', size: 0})
-		expect(typeof fileName).toBe('undefined')
-		done()
-	})
-
-	test('upload with no path should error', async done => {
+	test('upload avatar image with size of 0 should error', async done => {
 		expect.assertions(1)
 		await expect(
-			this.user.uploadAvatar(this.id,{type: 'image/png', size: 1})
+			this.user.uploadAvatar(this.id, {path: 'test/avatar3.jpeg', type: 'image/jpeg'})
+		).rejects.toEqual(Error('image size too small'))
+		done()
+	})
+
+	test('upload avatar image where path does not exist should error', async done => {
+		expect.assertions(1)
+		await expect(
+			this.user.uploadAvatar(this.id, {path: 'test/avatar4.jpeg', type: 'image/jpeg'})
+		).rejects.toEqual(Error('image not found'))
+		done()
+	})
+
+	test('upload avatar image with no path should error', async done => {
+		expect.assertions(1)
+		await expect(
+			this.user.uploadAvatar(this.id,{type: 'image/png'})
 		).rejects.toEqual(Error('path is empty'))
 		done()
 	})
 
-	test('upload with no type should error', async done => {
+	test('upload avatar image with empty path should error', async done => {
 		expect.assertions(1)
 		await expect(
-			this.user.uploadAvatar(this.id,{path: 'test/avatar1.png', size: 1})
+			this.user.uploadAvatar(this.id,{path: '', type: 'image/png'})
+		).rejects.toEqual(Error('path is empty'))
+		done()
+	})
+
+	test('upload avatar image with no type should error', async done => {
+		expect.assertions(1)
+		await expect(
+			this.user.uploadAvatar(this.id,{path: 'test/avatar1.png'})
 		).rejects.toEqual(Error('type is empty'))
 		done()
 	})
 
-	test('upload with no size should error', async done => {
+	test('upload avatar image with empty type should error', async done => {
 		expect.assertions(1)
 		await expect(
-			this.user.uploadAvatar(this.id, {path: 'test/avatar2.jpeg', type: 'image/jpeg'})
-		).rejects.toEqual(Error('size is empty'))
+			this.user.uploadAvatar(this.id,{path: 'test/avatar1.png', type: ''})
+		).rejects.toEqual(Error('type is empty'))
 		done()
 	})
 })

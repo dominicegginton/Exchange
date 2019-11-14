@@ -5,6 +5,7 @@ const {Client} = require('pg')
 const Bcrypt = require('bcrypt-promise')
 const Mime = require('mime-types')
 const FileSystem = require('fs-extra')
+const Sharp = require('sharp')
 const GenerateId = require('../../../utils/generateId')
 const Validate = require('../../../utils/validate')
 
@@ -14,11 +15,11 @@ class User {
 	constructor() {
 		return (async() => {
 			this.database = new Client({
-				user: process.env.USER_DB_USER,
-				host: process.env.USER_DB_HOST,
-				database: process.env.USER_DB_DATABASE,
-				password: process.env.USER_DB_PASSWORD,
-				port: process.env.USER_DB_PORT,
+				user: process.env.EXCHANGE_DB_USER_USERNAME,
+				host: process.env.EXCHANGE_DB_USER_HOST,
+				database: process.env.EXCHANGE_DB_USER_DATABASE,
+				password: process.env.EXCHANGE_DB_USER_PASSWORD,
+				port: process.env.EXCHANGE_DB_USER_PORT,
 			})
 			await this.database.connect()
 			await this.database.query(`CREATE TABLE IF NOT EXISTS Users 
@@ -62,12 +63,16 @@ class User {
 
 	async uploadAvatar(userId, avatar) {
 		try {
-			Validate(avatar, ['path', 'type', 'size'])
-			if (avatar.size === 0) return
+			Validate(avatar, ['path', 'type'])
 			const {path, type} = avatar
+			if (!await FileSystem.exists(path)) throw new Error('image not found')
+			const fileStats = await FileSystem.stat(path)
+			if (fileStats.size === 0) throw new Error('image size too small')
 			const fileExtension = Mime.extension(type)
 			const fileName = `${GenerateId()}.${fileExtension}`
-			await FileSystem.copy(path, `data/avatars/${fileName}`)
+			const avatarSize = {width: 200, height: 200}
+			await FileSystem.ensureDir('data/avatars/')
+			await Sharp(path).resize(avatarSize).png().toFile(`data/avatars/${fileName}`)
 			const sql = `UPDATE Users SET avatar='${fileName}' WHERE id='${userId}'`
 			await this.database.query(sql)
 			return fileName

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+echo '> Removing Folder data/'
+rm -rf data/
+
+echo '> Attempting to remove Database exchange_dev_db_user'
+docker stop exchange_dev_db_user
+docker rm exchange_dev_db_user
+echo '> Attempting to remove Database exchange_dev_db_item'
+docker stop exchange_dev_db_item
+docker rm exchange_dev_db_item
+echo '> Attempting to remove Database exchange_dev_db_wishlist'
+docker stop exchange_dev_db_wishlist
+docker rm exchange_dev_db_wishlist
+
+echo '> Attempting to remove Volume exchange_dev_db_user_data'
+docker volume rm exchange_dev_db_user_data
+echo '> Attempting to remove Volume exchange_dev_db_item_data'
+docker volume rm exchange_dev_db_item_data
+echo '> Attempting to remove Volume exchange_dev_db_wishlist_data'
+docker volume rm exchange_dev_db_wishlist_data

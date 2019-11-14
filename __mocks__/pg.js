@@ -13,9 +13,8 @@ class Client {
 	}
 
 	async query(sql) {
-		const data = await this.database.get(sql)
-		const res = {rows: [data]}
-		return res
+		const data = await this.database.all(sql)
+		return {rows: data}
 	}
 
 }

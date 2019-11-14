@@ -1,0 +1,28 @@
+doctype html5
+html(lang='en')
+	include includes/head.pug
+	head
+		link(rel = 'stylesheet', href = '/stylesheet/controls')
+		title Exchange - New Item
+	body
+		main
+			include includes/banner.pug
+			h1 New Item
+			h2 add your item to exchange with others
+			if error
+				.error
+					p=error.message
+			form(method='POST', action='/item/new', enctype="multipart/form-data", autocomplete="off")
+				.group
+					input.textbox(type='text', name='name', required)
+					label(for="name") Item Name
+				.group
+					textarea.textbox.textarea(name="description", required)
+					label(for="description") Description
+				.group
+					input.file#file(type='file', name='image', required)
+					p.fileName#fileName
+					label(for="avatar") Upload Item Image
+				.group
+					button.button.greenButton(type='submit') Add Item
+	script(src="/scripts/fileUpload.js")

@@ -6,6 +6,7 @@ const User = require('../modules/user')
 
 /* SETUP ROUTER */
 const router = new Router()
+router.prefix('/user')
 
 router.get('/login', async ctx => {
 	if (ctx.state.authenticated === true) ctx.redirect('/')
