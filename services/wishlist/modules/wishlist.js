@@ -50,6 +50,12 @@ class Wishlist {
 			throw error
 		}
 	}
+
+	async getItems(itemId) {
+		const sql = `SELECT * FROM Wishlists WHERE item_id='${itemId}';`
+		const result = await this.database.query(sql)
+		return result.rows
+	}
 }
 
 module.exports = Wishlist

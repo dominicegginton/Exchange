@@ -133,3 +133,44 @@ describe('delete()', () => {
 		done()
 	})
 })
+
+describe('getItems()', () => {
+
+	beforeEach(async() => {
+		this.item_id = GenerateId()
+		this.user_id = GenerateId()
+	})
+
+	test('get wishlist items should return valid item', async done => {
+		expect.assertions(7)
+		const newItem = {name: 'test', description: 'testing', item_id: this.item_id, user_id: this.user_id}
+		const newItemId = await this.wishlist.new(newItem)
+		const wishlistItems = await this.wishlist.getItems(this.item_id)
+		expect(wishlistItems.length).toBe(1)
+		expect(typeof wishlistItems[0]).toBe('object')
+		expect(wishlistItems[0].id).toBe(newItemId)
+		expect(wishlistItems[0].name).toBe('test')
+		expect(wishlistItems[0].description).toBe('testing')
+		expect(wishlistItems[0].item_id).toBe(this.item_id)
+		expect(wishlistItems[0].user_id).toBe(this.user_id)
+		done()
+	})
+
+	test('get wishlist items should return valid items', async done => {
+		expect.assertions(1)
+		const newItem1 = {name: 'test', description: 'testing', item_id: this.item_id, user_id: this.user_id}
+		const newItem2 = {name: 'foo', description: 'foo testing', item_id: this.item_id, user_id: this.user_id}
+		await this.wishlist.new(newItem1)
+		await this.wishlist.new(newItem2)
+		const wishlistItems = await this.wishlist.getItems(this.item_id)
+		expect(wishlistItems.length).toBe(2)
+		done()
+	})
+
+	test('get wishlist items should return empty array for item with no wish list', async done => {
+		expect.assertions(1)
+		const wishlistItems = await this.wishlist.getItems(this.item_id)
+		expect(wishlistItems.length).toBe(0)
+		done()
+	})
+})
