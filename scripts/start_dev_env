@@ -15,7 +15,6 @@ export EXCHANGE_DB_WISHLIST_PASSWORD=password
 export EXCHANGE_DB_WISHLIST_DATABASE=exchange_dev_db_wishlist
 export EXCHANGE_DB_WISHLIST_PORT=9933
 
-echo '$EXCHANGE_DB_USER_USERNAME'
 trap remove_dev_db INT
 
 function remove_dev_db() {
