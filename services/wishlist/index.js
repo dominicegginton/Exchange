@@ -4,8 +4,9 @@
 const Compose = require('koa-compose')
 
 /* IMPORT ROUTERS */
+const newRouter = require('./routes/new')
 
 /* COMPOSE ROUTERS */
-const Router = Compose()
+const Router = Compose([newRouter.routes()])
 
 module.exports = Router
