@@ -1,17 +1,17 @@
-.banner
+.banner_container
 	a(href='/')
 		img(src='/media/logo.svg')
-	.right
+	.banner_user_container
 		if user
-			.barButton
+			.banner_user_button
 				a(href='/user/logout') Logout
-			.separator
-			.avatar
+			.banner_separator
+			.banner_user_avatar
 				a(href='/user')
 					img(src='/user/avatar/' + user.avatar)
 		else
-			.barButton
+			.banner_user_button
 				a(href='/user/login') Login
-			.separator
-			.barButton
+			.banner_separator
+			.banner_user_button
 				a(href='/user/register') Register

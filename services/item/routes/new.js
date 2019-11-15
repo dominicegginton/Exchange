@@ -10,7 +10,7 @@ router.prefix('/item')
 
 router.get('/new', async ctx => {
 	if (!!ctx.state.user) {
-		await ctx.render('newItem')
+		await ctx.render('item_new')
 	} else ctx.redirect('/')
 })
 

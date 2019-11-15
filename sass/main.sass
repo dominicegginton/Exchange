@@ -10,45 +10,45 @@ body
 main
 	display: block
 	width: 100%
-	max-width: $pageWidth
+	max-width: $page_width
 	margin: 0 0 0 0
 	position: relative
 	left: 50%
 	transform: translateX(-50%)
-	@media screen and (max-width: $pageWidth + 80)
+	@media screen and (max-width: $page_width + 80)
 		left: unset
 		transform: unset
 		margin: 0 0 0 0
-		max-width: $pageWidth - 100
+		max-width: $page_width - 100
 		padding: 0 50 0 50
 		min-width: unset
 		width: unset
 
-.banner
+.banner_container
 	margin: 50 0 50 0
 	img
-		width: $iconSize
-	.right
+		width: $icon_size
+	.banner_user_container
 		float: right
-		height: $iconSize
-		.separator
+		height: $icon_size
+		.banner_separator
 			display: inline-block
 			position: relative
 			top: 50%
 			transform: translateY(-50%)
 			margin: 0 20 0 20
-		.separator:before
+		.banner_separator:before
 			content: '/'
-		.barButton
+		.banner_user_button
 			display: inline-block
 			position: relative
 			top: 50%
 			transform: translateY(-50%)
-		.avatar
+		.banner_user_avatar
 			vertical-align: top
 			display: inline-block
 			img
-				height: $iconSize
+				height: $icon_size
 				border-radius: 10px
 				display: block
 

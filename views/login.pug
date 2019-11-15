@@ -3,7 +3,6 @@ html(lang='en')
 	include includes/head.pug
 	head
 		link(rel = 'stylesheet', href = '/stylesheet/controls')
-		script(src="scripts/fileUpload.js")
 		title Exchange - Login
 	body
 		main
@@ -21,4 +20,4 @@ html(lang='en')
 					input.textbox(type='password', name='password', required)
 					label(for="password") Password
 				.group
-					button.button.greenButton(type='submit') Login
+					button.button(type='submit') Login
