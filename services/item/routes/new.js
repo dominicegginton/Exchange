@@ -10,14 +10,14 @@ router.prefix('/item')
 
 router.get('/new', async ctx => {
 	if (!!ctx.state.user) {
-		await ctx.render('newItem')
+		await ctx.render('item_new')
 	} else ctx.redirect('/')
 })
 
 router.post('/new', async ctx => {
 	if (!!ctx.state.user) {
 		const newItem = ctx.request.body
-		newItem.userId = ctx.state.user.id
+		newItem.user_id = ctx.state.user.id
 		const newItemImage = ctx.request.files.image
 		const item = await new Item()
 		const newItemId = await item.new(newItem)

@@ -3,12 +3,12 @@
 form
 	margin: 50 0 0 0
 	width: 400
-	@media screen and (max-width: $pageWidth)
+	@media screen and (max-width: $page_width)
 		width: 100%
 	.group
 		position: relative
 		margin: 0 0 35 0
-		@media screen and (max-width: $pageWidth)
+		@media screen and (max-width: $page_width)
 				margin: 0 0 25 0
 		label
 			color: $black
@@ -22,12 +22,12 @@ form
 			transition: 0.2s ease all
 			-moz-transition: 0.2s ease all
 			-webkit-transition: 0.2s ease all
-			@media screen and (max-width: $pageWidth)
+			@media screen and (max-width: $page_width)
 				top: 10
 	input
 		width: 100%
 		height: 25
-		@media screen and (max-width: $pageWidth)
+		@media screen and (max-width: $page_width)
 			width: 100%
 	.textbox
 		padding: 20 20 20 5
@@ -45,7 +45,7 @@ form
 			top: -25
 			opacity: 1
 			font-size: 0.8rem
-			@media screen and (max-wdith: $pageWidth)
+			@media screen and (max-wdith: $page_width)
 				top: -15
 	.textbox:focus
 		outline: none
@@ -54,14 +54,14 @@ form
 			top: -25
 			opacity: 1
 			font-size: 0.8rem
-			@media screen and (max-width: $pageWidth)
+			@media screen and (max-width: $page_width)
 				top: -15
 	.file
 		outline: none
 		opacity: 0
 		z-index: 100
 		cursor: pointer
-	.fileName
+	.file_name
 		padding: 0 0 0 5
 		position: absolute
 		top: 5
@@ -73,10 +73,10 @@ form
 			top: -25
 			opacity: 1
 			font-size: 0.8rem
-			@media screen and (max-width: $pageWidth)
+			@media screen and (max-width: $page_width)
 				top: -15
 	.textarea
-		font-family: $font-family
+		font-family: $font_family
 		maxlength: 5
 		resize: vertical
 		width: 100%
@@ -92,7 +92,7 @@ form
 	border: none
 	border-radius: 10px
 	font-size: 1rem
-	font-family: $font-family
+	font-family: $font_family
 	transition: all 0.2s ease-in-out
 .button:hover
 	color: $green

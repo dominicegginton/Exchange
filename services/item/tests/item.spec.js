@@ -20,7 +20,7 @@ describe('new()', () => {
 
 	test('add new item with valid data', async done => {
 		expect.assertions(2)
-		const newItem = {name: 'test', description: 'testing', userId: GenerateId()}
+		const newItem = {name: 'test', description: 'testing', user_id: GenerateId()}
 		const newItemId = await this.item.new(newItem)
 		expect(typeof newItemId).toBe('string')
 		expect(newItemId.length).toBe(36)
@@ -29,28 +29,28 @@ describe('new()', () => {
 
 	test('add new item with no name object should error', async done => {
 		expect.assertions(1)
-		const newItem = {description: 'testing', userId: GenerateId()}
+		const newItem = {description: 'testing', user_id: GenerateId()}
 		await expect(this.item.new(newItem)).rejects.toEqual(Error('name is empty'))
 		done()
 	})
 
 	test('add new item with empty name should error', async done => {
 		expect.assertions(1)
-		const newItem = {name: '', description: 'testing', userId: GenerateId()}
+		const newItem = {name: '', description: 'testing', user_id: GenerateId()}
 		await expect(this.item.new(newItem)).rejects.toEqual(Error('name is empty'))
 		done()
 	})
 
 	test('add new item with no description object should error', async done => {
 		expect.assertions(1)
-		const newItem = {name: 'test', userId: GenerateId()}
+		const newItem = {name: 'test', user_id: GenerateId()}
 		await expect(this.item.new(newItem)).rejects.toEqual(Error('description is empty'))
 		done()
 	})
 
 	test('add new item with empty description should error', async done => {
 		expect.assertions(1)
-		const newItem = {name: 'test', description: '', userId: GenerateId()}
+		const newItem = {name: 'test', description: '', user_id: GenerateId()}
 		await expect(this.item.new(newItem)).rejects.toEqual(Error('description is empty'))
 		done()
 	})
@@ -58,14 +58,14 @@ describe('new()', () => {
 	test('add new item with no userId object should error', async done => {
 		expect.assertions(1)
 		const newItem = {name: 'test', description: 'testing'}
-		await expect(this.item.new(newItem)).rejects.toEqual(Error('userId is empty'))
+		await expect(this.item.new(newItem)).rejects.toEqual(Error('user_id is empty'))
 		done()
 	})
 
 	test('add new item with empty userId should error', async done => {
 		expect.assertions(1)
-		const newItem = {name: 'test', description: 'testing', userId: ''}
-		await expect(this.item.new(newItem)).rejects.toEqual(Error('userId is empty'))
+		const newItem = {name: 'test', description: 'testing', user_id: ''}
+		await expect(this.item.new(newItem)).rejects.toEqual(Error('user_id is empty'))
 		done()
 	})
 })
@@ -73,7 +73,7 @@ describe('new()', () => {
 describe('uploadImage()', () => {
 
 	beforeEach(async() => {
-		const newItem = {name: 'test', description: 'testing', userId: GenerateId()}
+		const newItem = {name: 'test', description: 'testing', user_id: GenerateId()}
 		this.id = await this.item.new(newItem)
 		MockFS({
 			'data/images/': { /* EMPTY DIRECTORY */ },
@@ -158,39 +158,39 @@ describe('uploadImage()', () => {
 describe('getDetails()', () => {
 
 	beforeEach(async() => {
-		const newItem = {name: 'test', description: 'testing', userId: GenerateId()}
-		this.itemId = await this.item.new(newItem)
+		const newItem = {name: 'test', description: 'testing', user_id: GenerateId()}
+		this.item_id = await this.item.new(newItem)
 	})
 
 	test('get details for valid item', async done => {
 		expect.assertions(6)
-		const itemDetails = await this.item.getDetails(this.itemId)
+		const itemDetails = await this.item.getDetails(this.item_id)
 		expect(typeof itemDetails).toBe('object')
 		expect(itemDetails.name).toBe('test')
 		expect(itemDetails.description).toBe('testing')
-		expect(typeof itemDetails.userId).toBe('string')
-		expect(itemDetails.userId.length).toBe(36)
+		expect(typeof itemDetails.user_id).toBe('string')
+		expect(itemDetails.user_id.length).toBe(36)
 		expect(itemDetails.image).toBe(null)
 		done()
 	})
 
 	test('get details for valid user when more than one user is registered', async done => {
 		expect.assertions(6)
-		const newItem = {name: 'foo', description: 'testing another item', userId: GenerateId()}
+		const newItem = {name: 'foo', description: 'testing another item', user_id: GenerateId()}
 		const newItemId = await this.item.new(newItem)
 		const itemDetails = await this.item.getDetails(newItemId)
 		expect(typeof itemDetails).toBe('object')
 		expect(itemDetails.name).toBe('foo')
 		expect(itemDetails.description).toBe('testing another item')
-		expect(typeof itemDetails.userId).toBe('string')
-		expect(itemDetails.userId.length).toBe(36)
+		expect(typeof itemDetails.user_id).toBe('string')
+		expect(itemDetails.user_id.length).toBe(36)
 		expect(itemDetails.image).toBe(null)
 		done()
 	})
 
 	test('get details for invalid item id should error', async done => {
 		expect.assertions(1)
-		await expect(this.item.getDetails('invlaid-id')).rejects.toEqual(Error('Invalid item id'))
+		await expect(this.item.getDetails('invalid-id')).rejects.toEqual(Error('Invalid item id'))
 		done()
 	})
 })
@@ -198,37 +198,37 @@ describe('getDetails()', () => {
 describe('getUsersItems()', () => {
 
 	beforeEach(async() => {
-		this.userId = GenerateId()
+		this.user_id = GenerateId()
 	})
 
 	test('get users items should return valid item', async done => {
 		expect.assertions(6)
-		const newItem = {name: 'test', description: 'testing', userId: this.userId}
+		const newItem = {name: 'test', description: 'testing', user_id: this.user_id}
 		const newItemId = await this.item.new(newItem)
-		const userItems = await this.item.getUsersItems(this.userId)
+		const userItems = await this.item.getUsersItems(this.user_id)
 		expect(userItems.length).toBe(1)
 		expect(typeof userItems[0]).toBe('object')
 		expect(userItems[0].id).toBe(newItemId)
 		expect(userItems[0].name).toBe('test')
 		expect(userItems[0].description).toBe('testing')
-		expect(userItems[0].userId).toBe(this.userId)
+		expect(userItems[0].user_id).toBe(this.user_id)
 		done()
 	})
 
 	test('get users items should return valid items', async done => {
 		expect.assertions(1)
-		const newItem1 = {name: 'test', description: 'testing', userId: this.userId}
-		const newItem2 = {name: 'foo', description: 'foo testing', userId: this.userId}
+		const newItem1 = {name: 'test', description: 'testing', user_id: this.user_id}
+		const newItem2 = {name: 'foo', description: 'foo testing', user_id: this.user_id}
 		await this.item.new(newItem1)
 		await this.item.new(newItem2)
-		const userItems = await this.item.getUsersItems(this.userId)
+		const userItems = await this.item.getUsersItems(this.user_id)
 		expect(userItems.length).toBe(2)
 		done()
 	})
 
 	test('get users items should return empty array for user with no items', async done => {
 		expect.assertions(1)
-		const userItems = await this.item.getUsersItems(this.userId)
+		const userItems = await this.item.getUsersItems(this.user_id)
 		expect(userItems.length).toBe(0)
 		done()
 	})

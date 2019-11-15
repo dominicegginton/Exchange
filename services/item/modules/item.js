@@ -21,17 +21,17 @@ class Item {
 			await this.database.connect()
 			await this.database.query(`CREATE TABLE IF NOT EXISTS Items
 			(id varchar(36) PRIMARY KEY NOT NULL, name varchar(40) NOT NULL,
-			description varchar(500) NOT NULL, image varchar(100), userId varchar(36) NOT NULL);`)
+			description varchar(500) NOT NULL, image varchar(100), user_id varchar(36) NOT NULL);`)
 			return this
 		})()
 	}
 
 	async new(newItem) {
 		try {
-			Validate(newItem, ['name', 'description', 'userId'])
+			Validate(newItem, ['name', 'description', 'user_id'])
 			const id = GenerateId()
-			const sql = `INSERT INTO Items (id, name, description, userId) VALUES
-			('${id}', '${newItem.name}', '${newItem.description}', '${newItem.userId}');`
+			const sql = `INSERT INTO Items (id, name, description, user_id) VALUES
+			('${id}', '${newItem.name}', '${newItem.description}', '${newItem.user_id}');`
 			await this.database.query(sql)
 			return id
 		} catch (error) {
@@ -71,7 +71,7 @@ class Item {
 	}
 
 	async getUsersItems(userId) {
-		const sql = `SELECT * FROM Items WHERE userId='${userId}';`
+		const sql = `SELECT * FROM Items WHERE user_id='${userId}';`
 		const result = await this.database.query(sql)
 		return result.rows
 	}
