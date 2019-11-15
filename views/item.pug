@@ -12,7 +12,7 @@ html(lang='en')
 				img(src='/item/image/' + item.image)
 				h1=item.name
 				p.item_description=item.description
-				if user.id === item.userid
+				if user.id === item.user_id
 					.inline_header_button
 						h3 My Wish List
 						.separator
