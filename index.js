@@ -23,6 +23,7 @@ const Offer = require('./middleware/offer')
 const UserService = require('./services/user')
 const ItemService = require('./services/item')
 const WishlistService = require('./services/wishlist')
+const OfferService = require('./services/offer')
 
 /* SETUP KOA */
 const app = new Koa()
@@ -46,6 +47,7 @@ app.use(StylesheetRouter.routes())
 app.use(UserService)
 app.use(ItemService)
 app.use(WishlistService)
+app.use(OfferService)
 
 /* SETUP PORT */
 const defaultPort = 8080
