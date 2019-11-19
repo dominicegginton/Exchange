@@ -20,4 +20,10 @@ html(lang='en')
 				else
 					h3 Wish List
 				#wishlist_container
+				if user.id !== item.user_id
+					h3 Make A Offer
+					form(method='POST', action='/offer/new/' + item.id, enctype="multipart/form-data", autocomplete="off")
+						select#offer_offered_item(name='offered_item_id')
+						.group
+							button.button(type='submit') Offer
 	script(src = '/scripts/item.js')
