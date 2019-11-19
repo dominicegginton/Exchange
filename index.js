@@ -17,6 +17,7 @@ const StylesheetRouter = require('./routes/stylesheet')
 
 /* IMPORT MIDDLEWARE */
 const Authentication = require('./middleware/authentication')
+const Offer = require('./middleware/offer')
 
 /* IMPORT SERVICES */
 const UserService = require('./services/user')
@@ -35,6 +36,7 @@ app.use(BodyParser())
 app.use(Session(app))
 app.use(Logger())
 app.use(Authentication)
+app.use(Offer)
 
 /* SETUP GLOBAL ROUTES */
 app.use(HomeRouter.routes())
