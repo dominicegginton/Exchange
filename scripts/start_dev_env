@@ -20,6 +20,9 @@ export EXCHANGE_DB_OFFER_PASSWORD=password
 export EXCHANGE_DB_OFFER_DATABASE=exchange_dev_db_offer
 export EXCHANGE_DB_OFFER_PORT=9944
 
+export EXCHANGE_GMAIL_USERNAME=exchange.dev.mail@gmail.com
+export EXCHANGE_GMAIL_PASSWORD=Letmein123!
+
 trap remove_dev_db INT
 
 function remove_dev_db() {
