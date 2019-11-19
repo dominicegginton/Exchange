@@ -47,11 +47,23 @@ function addWishlistItemDeleteButton(wishlistItemContainer) {
 	inlineHeadingButton[0].appendChild(deleteButton)
 }
 
+function addMyItemsToOfferedItemSelection(myItem) {
+	const selection = document.getElementById('offer_offered_item')
+	const option = document.createElement('option')
+	option.setAttribute('value', myItem.id)
+	option.innerHTML = myItem.name
+	selection.appendChild(option)
+}
+
 (async() => {
 	const windowLocationPathnameLocation = 3
 	const itemId = window.location.pathname.split('/')[windowLocationPathnameLocation]
 	const wishListItems = await fetchJSON(`/wishlist/api/getItems/${itemId}`)
 	wishListItems.forEach(wishlistItem => {
 		addWishlistItemContainer(wishlistItem)
+	})
+	const myItems = await fetchJSON('/item/api/myItems')
+	myItems.forEach(myItem => {
+		addMyItemsToOfferedItemSelection(myItem)
 	})
 })()
