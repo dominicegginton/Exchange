@@ -83,6 +83,12 @@ class Offer {
 		if (Number(data.records) === 0) return false
 		else return true
 	}
+
+	async getUsersReceivedOffers(userId) {
+		const sql = `SELECT * FROM Offers WHERE user_id='${userId}';`
+		const result = await this.database.query(sql)
+		return result.rows
+	}
 }
 
 module.exports = Offer

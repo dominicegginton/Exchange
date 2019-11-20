@@ -13,42 +13,39 @@ jest.mock('nodemailer')
 beforeEach(async() => {
 	this.offer = await new Offer()
 	this.transporter = Nodemailer.createTransport()
+	this.userId = GenerateId()
+	this.offeredUserId = GenerateId()
+	this.newOffer = {
+		item: {
+			id: GenerateId(),
+			name: 'test',
+			description: 'testing',
+			image: 'testing',
+			user_id: this.userId
+		},
+		user: {
+			id: this.userId,
+			name: 'test user',
+			email: 'test@testing.com',
+			avatar: 'test'
+		},
+		offered_item: {
+			id: GenerateId(),
+			name: 'foo',
+			description: 'foo testing',
+			image: 'testing',
+			user_id: this.offeredUserId
+		},
+		offered_user: {
+			id: this.offeredUserId,
+			name: 'foo',
+			email: 'foo@testing.com',
+			avatar: 'test'
+		}
+	}
 })
 
 describe('new()', () => {
-
-	beforeEach(async() => {
-		const userId = GenerateId()
-		const offeredUserId = GenerateId()
-		this.newOffer = {
-			item: {
-				id: GenerateId(),
-				name: 'test',
-				description: 'testing',
-				image: 'testing',
-				user_id: userId
-			},
-			user: {
-				id: userId,
-				name: 'test user',
-				email: 'test@testing.com',
-				avatar: 'test'
-			},
-			offered_item: {
-				id: GenerateId(),
-				name: 'foo',
-				description: 'foo testing',
-				image: 'testing',
-				user_id: offeredUserId
-			},
-			offered_user: {
-				id: offeredUserId,
-				name: 'foo',
-				email: 'foo@testing.com',
-				avatar: 'test'
-			}
-		}
-	})
 
 	test('add new offer with valid data', async done => {
 		expect.assertions(3)
@@ -291,5 +288,41 @@ describe('new()', () => {
 				done()
 			})
 		})
+	})
+})
+
+describe('getUsersReceivedOffers()', () => {
+
+	beforeEach(async() => {
+		this.userId = GenerateId()
+		this.newOffer.item.user_id = this.userId
+		this.newOffer.user.id = this.userId
+		await this.offer.new(this.newOffer)
+	})
+
+	test('get users received offers should return offers objects', async done => {
+		expect.assertions(3)
+		const userOffers = await this.offer.getUsersReceivedOffers(this.userId)
+		expect(typeof userOffers).toBe('object')
+		expect(userOffers.length).toBe(1)
+		expect(userOffers[0].user_id).toBe(this.userId)
+		done()
+	})
+
+	test('get users received offers for user with no offers should return empty objects', async done => {
+		expect.assertions(1)
+		const userOffers = await this.offer.getUsersReceivedOffers(GenerateId(0))
+		expect(userOffers.length).toBe(0)
+		done()
+	})
+
+	test('get users received offers should return multiple offers objects', async done => {
+		expect.assertions(2)
+		this.newOffer.item.id = GenerateId()
+		await this.offer.new(this.newOffer)
+		const userOffers = await this.offer.getUsersReceivedOffers(this.userId)
+		expect(typeof userOffers).toBe('object')
+		expect(userOffers.length).toBe(2)
+		done()
 	})
 })

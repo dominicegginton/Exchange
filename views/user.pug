@@ -4,6 +4,7 @@ html(lang='en')
 	head
 		link(rel = 'stylesheet', href = '/stylesheet/user')
 		link(rel ='stylesheet', href = '/stylesheet/item')
+		link(rel ='stylesheet', href = '/stylesheet/offer')
 		link(rel = 'stylesheet', href = '/stylesheet/controls')
 		title='Exchange - ' + user.name
 	body
@@ -17,4 +18,5 @@ html(lang='en')
 					.separator
 					a(href="/item/new") New
 				#my_items
+			#my_offers
 	script(src="/scripts/user.js")
