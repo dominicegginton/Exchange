@@ -51,6 +51,7 @@ function createItemDomElement(offer) {
 	const offerItemContainer = document.createElement('div')
 	offerItemContainer.setAttribute('class', 'offer_item_container')
 	offerItemContainer.innerHTML = offer.item.name
+	offerItemContainer.setAttribute('onclick', `window.location='/item/details/${offer.item_id}'`)
 	return offerItemContainer
 }
 
@@ -74,6 +75,7 @@ function createOfferedItemDomElement(offer) {
 	offerOfferedItemDescription.innerHTML = offer.offered_item.description
 	const offerOfferedItemContainer = document.createElement('div')
 	offerOfferedItemContainer.setAttribute('class', 'offer_offered_item_container')
+	offerOfferedItemContainer.setAttribute('onclick', `window.location='/item/details/${offer.offered_item_id}'`)
 	offerOfferedItemContainer.append(offerOfferedItemName, offerOfferedItemDescription)
 	return offerOfferedItemContainer
 }
