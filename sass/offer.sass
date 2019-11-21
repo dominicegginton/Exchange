@@ -18,6 +18,7 @@
 		display: inline-block
 		border-radius: 25px
 		position: absolute
+		cursor: pointer
 	.offer_offered_user_container
 		margin: 0 0 10 0
 		.offer_offered_user_avatar
@@ -30,6 +31,11 @@
 			display: inline-block
 			vertical-align: middle
 	.offer_offered_item_container
+		cursor: pointer
+		p
+			white-space: nowrap
+			overflow: hidden
+			text-overflow: ellipsis
 	.offer_accept
 		color: $black
 		position: absolute
