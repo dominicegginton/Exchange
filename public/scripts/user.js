@@ -43,7 +43,7 @@ function createOfferDomElement(offer) {
 	const offerContainer = document.createElement('div')
 	offerContainer.setAttribute('class', 'offer_container')
 	offerContainer.append(createItemDomElement(offer), createOfferedUserDomElement(offer),
-		createOfferedItemDomElement(offer), createOfferDeleteDomElement(offer))
+		createOfferedItemDomElement(offer), createOfferAcceptDomElement(offer))
 	return offerContainer
 }
 
@@ -78,7 +78,7 @@ function createOfferedItemDomElement(offer) {
 	return offerOfferedItemContainer
 }
 
-function createOfferDeleteDomElement(offer) {
+function createOfferAcceptDomElement(offer) {
 	const offerAccept = document.createElement('div')
 	offerAccept.setAttribute('class', 'offer_accept')
 	offerAccept.setAttribute('data', offer.id)
