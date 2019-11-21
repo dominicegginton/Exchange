@@ -30,8 +30,8 @@ A simple website to share details of items to be swapped.
 This step adds features that improve the site's GDPR compliance.
 
 1. ✅ The item details page should not display any personally-identifiable details such as the user's name or email address or profile picture.
-2. The details page should display a dropdown list containing the items the viewing user want to swap.
-3. Clicking on the 'make an offer' should automatically send an email (without using the email client) that contains:
+2. ✅ The details page should display a dropdown list containing the items the viewing user want to swap.
+3. ✅ Clicking on the 'make an offer' should automatically send an email (without using the email client) that contains:
     1. The details of the person making the offer.
     2. The item they want.
     3. The item they are willing to swap.
