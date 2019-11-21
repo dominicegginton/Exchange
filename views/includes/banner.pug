@@ -6,6 +6,8 @@
 			.banner_user_button
 				a(href='/user/logout') Logout
 			.banner_separator
+			.banner_user_name
+				a(href='/user')=user.name
 			.banner_user_avatar
 				a(href='/user')
 					img(src='/user/avatar/' + user.avatar)
