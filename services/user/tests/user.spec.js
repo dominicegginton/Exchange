@@ -15,6 +15,10 @@ beforeEach( async() => {
 	this.user = await new Users()
 })
 
+afterEach(async() => {
+	this.user.tearDown()
+})
+
 describe('register()', () => {
 
 	test('register with valid user data', async done => {

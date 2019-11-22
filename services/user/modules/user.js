@@ -1,7 +1,7 @@
 'use strict'
 
 /* IMPORT MODULES */
-const {Client} = require('pg')
+const {Pool} = require('pg')
 const Bcrypt = require('bcrypt-promise')
 const Mime = require('mime-types')
 const FileSystem = require('fs-extra')
@@ -14,14 +14,16 @@ const slatRounds = 10
 class User {
 	constructor() {
 		return (async() => {
-			this.database = new Client({
-				user: process.env.EXCHANGE_DB_USER_USERNAME,
-				host: process.env.EXCHANGE_DB_USER_HOST,
-				database: process.env.EXCHANGE_DB_USER_DATABASE,
-				password: process.env.EXCHANGE_DB_USER_PASSWORD,
-				port: process.env.EXCHANGE_DB_USER_PORT,
-			})
-			await this.database.connect()
+			if (!User.pool) {
+				User.pool = new Pool({
+					user: process.env.EXCHANGE_DB_USER_USERNAME,
+					host: process.env.EXCHANGE_DB_USER_HOST,
+					database: process.env.EXCHANGE_DB_USER_DATABASE,
+					password: process.env.EXCHANGE_DB_USER_PASSWORD,
+					port: process.env.EXCHANGE_DB_USER_PORT,
+				})
+			}
+			this.database = await User.pool.connect()
 			await this.database.query(`CREATE TABLE IF NOT EXISTS Users 
 			(id varchar(36) PRIMARY KEY NOT NULL, name varchar(40) NOT NULL, email varchar(40) NOT NULL, 
 			password varchar(100) NOT NULL, avatar varchar(100));`)
@@ -98,6 +100,10 @@ class User {
 		const data = result.rows[0]
 		if (Number(data.records) === 0) return false
 		else return true
+	}
+
+	async tearDown() {
+		this.database.release()
 	}
 
 }
