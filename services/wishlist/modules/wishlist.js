@@ -1,21 +1,23 @@
 'use strict'
 
 /* IMPORT MODULES */
-const {Client} = require('pg')
+const {Pool} = require('pg')
 const GenerateId = require('../../../utils/generateId')
 const Validate = require('../../../utils/validate')
 
 class Wishlist {
 	constructor() {
 		return (async() => {
-			this.database = new Client({
-				user: process.env.EXCHANGE_DB_WISHLIST_USERNAME,
-				host: process.env.EXCHANGE_DB_WISHLIST_HOST,
-				database: process.env.EXCHANGE_DB_WISHLIST_DATABASE,
-				password: process.env.EXCHANGE_DB_WISHLIST_PASSWORD,
-				port: process.env.EXCHANGE_DB_WISHLIST_PORT,
-			})
-			await this.database.connect()
+			if (!Wishlist.pool) {
+				Wishlist.pool = new Pool({
+					user: process.env.EXCHANGE_DB_WISHLIST_USERNAME,
+					host: process.env.EXCHANGE_DB_WISHLIST_HOST,
+					database: process.env.EXCHANGE_DB_WISHLIST_DATABASE,
+					password: process.env.EXCHANGE_DB_WISHLIST_PASSWORD,
+					port: process.env.EXCHANGE_DB_WISHLIST_PORT,
+				})
+			}
+			this.database = await Wishlist.pool.connect()
 			await this.database.query(`CREATE TABLE IF NOT EXISTS Wishlists
 			(id varchar(36) PRIMARY KEY NOT NULL, name varchar(40) NOT NULL,
 			description varchar(500) NOT NULL, item_id varchar(36) NOT NULL, user_id varchar(36) NOT NULL);`)
@@ -55,6 +57,10 @@ class Wishlist {
 		const sql = `SELECT * FROM Wishlists WHERE item_id='${itemId}';`
 		const result = await this.database.query(sql)
 		return result.rows
+	}
+
+	async tearDown() {
+		this.database.release()
 	}
 }
 

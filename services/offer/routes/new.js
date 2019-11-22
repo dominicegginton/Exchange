@@ -19,6 +19,7 @@ router.post('/new/:item_id', async ctx => {
 		const offer = await new Offer()
 		await offer.new(newOffer)
 		ctx.redirect('/user')
+		await offer.tearDown()
 	} else ctx.redirect('/')
 })
 

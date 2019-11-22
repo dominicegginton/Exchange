@@ -9,6 +9,7 @@ const authentication = async(ctx, next) => {
 		const user = await new User()
 		ctx.state.user = await user.getDetails(userId)
 		ctx.state.authenticated = true
+		await user.tearDown()
 	} else ctx.state.authenticated = false
 	await next()
 }

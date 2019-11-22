@@ -13,6 +13,7 @@ router.get('/api/myOffers', async ctx => {
 		const offer = await new Offer()
 		const myOffers = await offer.getUsersReceivedOffers(ctx.state.user.id)
 		ctx.body = myOffers
+		await offer.tearDown()
 	} else ctx.redirect('/')
 })
 

@@ -13,6 +13,7 @@ router.get('/api/userDetails/:user_id', async ctx => {
 		const user = await new User()
 		const userDetails = await user.getDetails(ctx.params.user_id)
 		ctx.body = userDetails
+		await user.tearDown()
 	}
 })
 

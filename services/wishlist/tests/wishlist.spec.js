@@ -14,6 +14,10 @@ beforeEach( async() => {
 	this.itemId = GenerateId()
 })
 
+afterEach(async() => {
+	this.wishlist.tearDown()
+})
+
 describe('new()', () => {
 
 	test('add new wishlist item with valid data', async done => {

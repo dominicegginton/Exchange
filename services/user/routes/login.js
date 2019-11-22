@@ -21,6 +21,7 @@ router.post('/login', async ctx => {
 		ctx.session.authenticated = true
 		ctx.session.id = userId
 		ctx.redirect('/')
+		await user.tearDown()
 	} catch (error) {
 		await ctx.render('login', {error: error})
 	}

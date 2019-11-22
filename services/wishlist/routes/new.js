@@ -22,6 +22,7 @@ router.post('/new/:item_id', async ctx => {
 		const wishList = await new Wishlist()
 		await wishList.new(item)
 		ctx.redirect(`/item/details/${ctx.params.item_id}`)
+		wishList.tearDown()
 	} else ctx.redirect('/')
 })
 

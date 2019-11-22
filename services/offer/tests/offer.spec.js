@@ -45,6 +45,10 @@ beforeEach(async() => {
 	}
 })
 
+afterEach(async() => {
+	this.offer.tearDown()
+})
+
 describe('new()', () => {
 
 	test('add new offer with valid data', async done => {

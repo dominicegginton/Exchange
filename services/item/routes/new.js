@@ -23,6 +23,7 @@ router.post('/new', async ctx => {
 		const newItemId = await item.new(newItem)
 		await item.uploadImage(newItemId, newItemImage)
 		ctx.redirect(`/item/details/${newItemId}`)
+		await item.tearDown()
 	} else ctx.redirect('/')
 })
 
