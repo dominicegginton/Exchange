@@ -16,6 +16,10 @@ beforeEach( async() => {
 	this.item = await new Item()
 })
 
+afterEach(async() => {
+	this.item.tearDown()
+})
+
 describe('new()', () => {
 
 	test('add new item with valid data', async done => {
