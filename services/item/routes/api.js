@@ -13,6 +13,7 @@ router.get('/api/myItems', async ctx => {
 		const item = await new Item()
 		const userItemsArray = await item.getUsersItems(ctx.state.user.id)
 		ctx.body = userItemsArray
+		Item.tearDown()
 	}
 })
 
@@ -21,6 +22,7 @@ router.get('/api/itemDetails/:item_id', async ctx => {
 		const item = await new Item()
 		const itemDetilas = await item.getDetails(ctx.params.item_id)
 		ctx.body = itemDetilas
+		item.tearDown()
 	}
 })
 

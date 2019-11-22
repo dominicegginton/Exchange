@@ -13,6 +13,7 @@ router.get('/details/:item_id', async ctx => {
 		const item = await new Item()
 		const itemDetails = await item.getDetails(ctx.params.item_id)
 		await ctx.render('item', {item: itemDetails})
+		await item.tearDown()
 	} else ctx.redirect('/')
 })
 
