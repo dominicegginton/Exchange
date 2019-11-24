@@ -78,6 +78,26 @@ class Item {
 		return result.rows
 	}
 
+	async getItems(search) {
+		if (!search) {
+			const sql = 'SELECT * FROM Items'
+			const result = await this.database.query(sql)
+			return result.rows
+		} else {
+			const searchWords = search.toUpperCase().split(' ')
+			const searchItems = []
+			for (let i = 0; i < searchWords.length; i++) {
+				const sql = `SELECT * FROM Items WHERE UPPER(name) LIKE '%${searchWords[i]}%' 
+					OR UPPER(description) LIKE '%${searchWords[i]}%';`
+				const result = await this.database.query(sql)
+				result.rows.forEach(item => searchItems.push(item))
+			}
+			const removeDuplicates = items => [...new Set(items.map(item => JSON.stringify(item)))]
+				.map(x => JSON.parse(x))
+			return removeDuplicates(searchItems)
+		}
+	}
+
 	async tearDown() {
 		this.database.release()
 	}
