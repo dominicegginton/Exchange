@@ -31,6 +31,33 @@ form
 			width: 100%
 	select
 		width: 100%
+	.searchbox
+		padding: 20 20 20 5
+		display: block
+		font-size: 1rem
+		border: none
+		outline: none
+		color: $black
+		opacity: 0.5
+		border-bottom: 1px solid $black
+		transition: 0.2s ease
+	.searchbox_valid
+		outline: none
+		~ label
+			top: -25
+			opacity: 1
+			font-size: 0.8rem
+			@media screen and (max-wdith: $page_width)
+				top: -15
+	.searchbox:focus
+		outline: none
+		opacity: 1
+		~ label
+			top: -25
+			opacity: 1
+			font-size: 0.8rem
+			@media screen and (max-width: $page_width)
+				top: -15
 	.textbox
 		padding: 20 20 20 5
 		display: block
@@ -85,6 +112,9 @@ form
 		min-height: 38
 		height: 100
 		padding: 5 5 5 5
+
+.search
+	width: 100%
 
 .button
 	padding: 0 0 0 0
