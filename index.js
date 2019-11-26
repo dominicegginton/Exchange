@@ -18,12 +18,14 @@ const StylesheetRouter = require('./routes/stylesheet')
 /* IMPORT MIDDLEWARE */
 const Authentication = require('./middleware/authentication')
 const Offer = require('./middleware/offer')
+const Suggestion = require('./middleware/suggestion')
 
 /* IMPORT SERVICES */
 const UserService = require('./services/user')
 const ItemService = require('./services/item')
 const WishlistService = require('./services/wishlist')
 const OfferService = require('./services/offer')
+const SuggestionService = require('./services/suggestion')
 
 /* SETUP KOA */
 const app = new Koa()
@@ -38,6 +40,7 @@ app.use(Session(app))
 app.use(Logger())
 app.use(Authentication)
 app.use(Offer)
+app.use(Suggestion)
 
 /* SETUP GLOBAL ROUTES */
 app.use(HomeRouter.routes())
@@ -48,6 +51,7 @@ app.use(UserService)
 app.use(ItemService)
 app.use(WishlistService)
 app.use(OfferService)
+app.use(SuggestionService)
 
 /* SETUP PORT */
 const defaultPort = 8080
