@@ -424,6 +424,43 @@ describe('new()', () => {
 	})
 })
 
+describe('getDetails()', () => {
+
+	beforeEach(async() => {
+		this.suggestionId = await this.suggestion.new(this.newSuggestion)
+	})
+
+	test('get details should return valid data for suggestion', async done => {
+		expect.assertions(6)
+		const suggestionDetails = await this.suggestion.getDetails(this.suggestionId)
+		expect(suggestionDetails.item_id).toBe(this.newSuggestion.item.id)
+		expect(suggestionDetails.user_id).toBe(this.newSuggestion.user.id)
+		expect(suggestionDetails.wishlist_item_id).toBe(this.newSuggestion.wishlist_item.id)
+		expect(suggestionDetails.suggested_item_id).toBe(this.newSuggestion.suggested_item.id)
+		expect(suggestionDetails.suggested_user_id).toBe(this.newSuggestion.suggested_user.id)
+		expect(suggestionDetails.suggested_wishlist_item_id).toBe(this.newSuggestion.suggested_wishlist_item.id)
+		done()
+	})
+
+	test('get details with suggestion id that does not exist should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.getDetails(GenerateId())).rejects.toEqual(Error('suggestion does not exist'))
+		done()
+	})
+
+	test('get details with no suggestion id should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.getDetails()).rejects.toEqual(Error('suggestionId is empty'))
+		done()
+	})
+
+	test('get details with empty suggestion id should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.getDetails('')).rejects.toEqual(Error('suggestionId is empty'))
+		done()
+	})
+})
+
 describe('getSuggestions()', () => {
 
 	beforeEach(async() => {
@@ -466,6 +503,18 @@ describe('getSuggestions()', () => {
 		expect(itemSuggestions[0].item_id).toBe(this.suggestedItemId)
 		done()
 	})
+
+	test('get suggestion with no itemId object should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.getSuggestions()).rejects.toEqual(Error('itemId is empty'))
+		done()
+	})
+
+	test('get suggestion with empty itemId object should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.getSuggestions('')).rejects.toEqual(Error('itemId is empty'))
+		done()
+	})
 })
 
 describe('remove()', () => {
@@ -481,6 +530,18 @@ describe('remove()', () => {
 		expect(itemSuggestions.length).toBe(0)
 		done()
 	})
+
+	test('remove with no suggestionId object should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.remove()).rejects.toEqual(Error('suggestionId is empty'))
+		done()
+	})
+
+	test('remove with empty suggestionId object should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.remove('')).rejects.toEqual(Error('suggestionId is empty'))
+		done()
+	})
 })
 
 describe('delete()', () => {
@@ -490,6 +551,18 @@ describe('delete()', () => {
 		expect(await this.suggestion.delete(this.suggestionId)).toBe(true)
 		const itemSuggestions = await this.suggestion.getSuggestions(this.itemId)
 		expect(itemSuggestions.length).toBe(0)
+		done()
+	})
+
+	test('delete with no wishlistId object should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.delete()).rejects.toEqual(Error('wishlistId is empty'))
+		done()
+	})
+
+	test('delete with empty wishlistId object should error', async done => {
+		expect.assertions(1)
+		await expect(this.suggestion.delete('')).rejects.toEqual(Error('wishlistId is empty'))
 		done()
 	})
 })

@@ -90,32 +90,60 @@ class Suggestion {
 		else return data[0].id
 	}
 
+	async getDetails(suggestionId) {
+		try {
+			if (!suggestionId) throw new Error('suggestionId is empty')
+			const sql = `SELECT * FROM Suggestions WHERE id = '${suggestionId}';`
+			const result = await this.database.query(sql)
+			const data = result.rows
+			if (data.length === 0) throw new Error('suggestion does not exist')
+			return data[0]
+		} catch (error) {
+			throw error
+		}
+	}
+
 	async getSuggestions(itemId) {
-		const sql = `SELECT * FROM Suggestions WHERE item_id = '${itemId}' OR suggested_item_id = '${itemId}';`
-		const result = await this.database.query(sql)
-		const data = result.rows
-		data.forEach(suggestion => {
-			if (suggestion.item_id !== itemId) {
-				[suggestion['item_id'], suggestion['suggested_item_id']] = [suggestion['suggested_item_id'],
-					suggestion['item_id']],
-				[suggestion['user_id'], suggestion['suggested_user_id']] = [suggestion['suggested_user_id'],
-					suggestion['user_id']]
-			}
-		})
-		return data
+		try {
+			if (!itemId) throw new Error('itemId is empty')
+			const sql = `SELECT * FROM Suggestions WHERE item_id = '${itemId}' OR suggested_item_id = '${itemId}';`
+			const result = await this.database.query(sql)
+			const data = result.rows
+			data.forEach(suggestion => {
+				if (suggestion.item_id !== itemId) {
+					[suggestion['item_id'], suggestion['suggested_item_id']] = [suggestion['suggested_item_id'],
+						suggestion['item_id']],
+					[suggestion['user_id'], suggestion['suggested_user_id']] = [suggestion['suggested_user_id'],
+						suggestion['user_id']]
+				}
+			})
+			return data
+		} catch (error) {
+			throw error
+		}
 	}
 
 	async remove(suggestionId) {
-		const sql = `DELETE FROM Suggestions WHERE id = '${suggestionId}';`
-		await this.database.query(sql)
-		return true
+		try {
+			if (!suggestionId) throw new Error('suggestionId is empty')
+			const sql = `DELETE FROM Suggestions WHERE id = '${suggestionId}';`
+			await this.database.query(sql)
+			return true
+		} catch (error) {
+			throw error
+		}
 	}
 
 	async delete(wishlistId) {
-		const sql = `DELETE FROM Suggestions WHERE wishlist_item_id = '${wishlistId}'
-			OR suggested_wishlist_item_id = '${wishlistId}';`
-		await this.database.query(sql)
-		return true
+		try {
+			if (!wishlistId) throw new Error('wishlistId is empty')
+			const sql = `DELETE FROM Suggestions WHERE wishlist_item_id = '${wishlistId}'
+				OR suggested_wishlist_item_id = '${wishlistId}';`
+			await this.database.query(sql)
+			return true
+		} catch (error) {
+			throw error
+		}
 	}
 
 	async tearDown() {
