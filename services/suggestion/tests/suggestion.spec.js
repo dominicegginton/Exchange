@@ -443,7 +443,7 @@ describe('getSuggestions()', () => {
 
 	test('get suggestion for item with no suggestions should return empty objects', async done => {
 		expect.assertions(1)
-		const itemSuggestions = await this.suggestion.getSuggestions(GenerateId()) 
+		const itemSuggestions = await this.suggestion.getSuggestions(GenerateId())
 		expect(itemSuggestions.length).toBe(0)
 		done()
 	})
@@ -464,6 +464,32 @@ describe('getSuggestions()', () => {
 		expect(typeof itemSuggestions).toBe('object')
 		expect(itemSuggestions.length).toBe(1)
 		expect(itemSuggestions[0].item_id).toBe(this.suggestedItemId)
+		done()
+	})
+})
+
+describe('remove()', () => {
+
+	beforeEach(async() => {
+		this.suggestionId = await this.suggestion.new(this.newSuggestion)
+	})
+
+	test('remove should delete record of suggestion', async done => {
+		expect.assertions(2)
+		expect(await this.suggestion.remove(this.suggestionId)).toBe(true)
+		const itemSuggestions = await this.suggestion.getSuggestions(this.itemId)
+		expect(itemSuggestions.length).toBe(0)
+		done()
+	})
+})
+
+describe('delete()', () => {
+
+	test('delete should delete record of suggestion', async done => {
+		expect.assertions(2)
+		expect(await this.suggestion.delete(this.suggestionId)).toBe(true)
+		const itemSuggestions = await this.suggestion.getSuggestions(this.itemId)
+		expect(itemSuggestions.length).toBe(0)
 		done()
 	})
 })

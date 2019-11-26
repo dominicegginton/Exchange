@@ -105,6 +105,19 @@ class Suggestion {
 		return data
 	}
 
+	async remove(suggestionId) {
+		const sql = `DELETE FROM Suggestions WHERE id = '${suggestionId}';`
+		await this.database.query(sql)
+		return true
+	}
+
+	async delete(wishlistId) {
+		const sql = `DELETE FROM Suggestions WHERE wishlist_item_id = '${wishlistId}'
+			OR suggested_wishlist_item_id = '${wishlistId}';`
+		await this.database.query(sql)
+		return true
+	}
+
 	async tearDown() {
 		this.database.release()
 	}
