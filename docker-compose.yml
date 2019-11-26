@@ -15,6 +15,8 @@ services:
       EXCHANGE_DB_WISHLIST_HOST: db_wishlist
       EXCHANGE_DB_OFFER_PORT: 5432
       EXCHANGE_DB_OFFER_HOST: db_offer
+      EXCHANGE_DB_SUGGESTION_PORT: 5432
+      EXCHANGE_DB_SUGGESTION_HOST: db_suggestion
     env_file:
       - .env
     depends_on:
@@ -22,6 +24,7 @@ services:
       - db_item
       - db_wishlist
       - db_offer
+      - db_suggestion
     ports:
       - ${EXCHANGE_SERVER_PORT}:${EXCHANGE_SERVER_PORT}
     volumes:
@@ -77,12 +80,25 @@ services:
     networks: 
       - exchange
 
+  db_suggestion:
+    image: postgres
+    container_name: exchange_db_suggestion
+    environment:
+      POSTGRES_DB: ${EXCHANGE_DB_SUGGESTION_DATABASE}
+      POSTGRES_USER: ${EXCHANGE_DB_SUGGESTION_USERNAME} 
+      POSTGRES_PASSWORD: ${EXCHANGE_DB_SUGGESTION_PASSWORD}
+    volumes:
+     - db_suggestion_data:/var/lib/postgresql/data
+    networks: 
+      - exchange
+
 volumes:
   server_image_data:
   db_user_data:
   db_item_data:
   db_wishlist_data:
   db_offer_data:
+  db_suggestion_data:
 
 networks:
   exchange:

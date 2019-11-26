@@ -15,6 +15,9 @@ docker rm exchange_dev_db_wishlist
 echo '> Removing Database exchange_dev_db_offer'
 docker stop exchange_dev_db_offer
 docker rm exchange_dev_db_offer
+echo '> Removing Database exchange_dev_db_suggestion'
+docker stop exchange_dev_db_suggestion
+docker rm exchange_dev_db_suggestion
 
 echo '> Attempting to remove Volume exchange_dev_db_user_data'
 docker volume rm exchange_dev_db_user_data
@@ -24,3 +27,5 @@ echo '> Attempting to remove Volume exchange_dev_db_wishlist_data'
 docker volume rm exchange_dev_db_wishlist_data
 echo '> Attempting to remove Volume exchange_dev_db_offer_data'
 docker volume rm exchange_dev_db_offer_data
+echo '> Attempting to remove Volume exchange_dev_db_suggestion_data'
+docker volume rm exchange_dev_db_suggestion_data
