@@ -90,6 +90,21 @@ class Suggestion {
 		else return data[0].id
 	}
 
+	async getSuggestions(itemId) {
+		const sql = `SELECT * FROM Suggestions WHERE item_id = '${itemId}' OR suggested_item_id = '${itemId}';`
+		const result = await this.database.query(sql)
+		const data = result.rows
+		data.forEach(suggestion => {
+			if (suggestion.item_id !== itemId) {
+				[suggestion['item_id'], suggestion['suggested_item_id']] = [suggestion['suggested_item_id'],
+					suggestion['item_id']],
+				[suggestion['user_id'], suggestion['suggested_user_id']] = [suggestion['suggested_user_id'],
+					suggestion['user_id']]
+			}
+		})
+		return data
+	}
+
 	async tearDown() {
 		this.database.release()
 	}

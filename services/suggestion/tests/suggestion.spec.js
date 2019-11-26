@@ -423,3 +423,47 @@ describe('new()', () => {
 		})
 	})
 })
+
+describe('getSuggestions()', () => {
+
+	beforeEach(async() => {
+		this.itemId = GenerateId()
+		this.newSuggestion.item.id = this.itemId
+		await this.suggestion.new(this.newSuggestion)
+	})
+
+	test('get suggestion should return one suggestion for valid item id', async done => {
+		expect.assertions(3)
+		const itemSuggestions = await this.suggestion.getSuggestions(this.itemId)
+		expect(typeof itemSuggestions).toBe('object')
+		expect(itemSuggestions.length).toBe(1)
+		expect(itemSuggestions[0].item_id).toBe(this.itemId)
+		done()
+	})
+
+	test('get suggestion for item with no suggestions should return empty objects', async done => {
+		expect.assertions(1)
+		const itemSuggestions = await this.suggestion.getSuggestions(GenerateId()) 
+		expect(itemSuggestions.length).toBe(0)
+		done()
+	})
+
+	test('get suggestion should return multiple suggestion objects for item', async done => {
+		expect.assertions(2)
+		this.newSuggestion.suggested_item.id = GenerateId()
+		await this.suggestion.new(this.newSuggestion)
+		const itemSuggestions = await this.suggestion.getSuggestions(this.itemId)
+		expect(typeof itemSuggestions).toBe('object')
+		expect(itemSuggestions.length).toBe(2)
+		done()
+	})
+
+	test('get suggestion should return correct item id for given item id', async done => {
+		expect.assertions(3)
+		const itemSuggestions = await this.suggestion.getSuggestions(this.suggestedItemId)
+		expect(typeof itemSuggestions).toBe('object')
+		expect(itemSuggestions.length).toBe(1)
+		expect(itemSuggestions[0].item_id).toBe(this.suggestedItemId)
+		done()
+	})
+})
