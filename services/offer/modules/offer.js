@@ -86,6 +86,17 @@ class Offer {
 		return result.rows
 	}
 
+	async reject(offerId) {
+		try {
+			if (!offerId) throw new Error('offerId is empty')
+			const sql = `DELETE FROM Offers WHERE id = '${offerId}';`
+			await this.database.query(sql)
+			return true
+		} catch (error) {
+			throw error
+		}
+	}
+
 	async tearDown() {
 		this.database.release()
 	}
