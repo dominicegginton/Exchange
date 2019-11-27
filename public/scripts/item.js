@@ -6,11 +6,11 @@ async function fetchJSON(url) {
 	return data
 }
 
+/* WISHLIST */
 async function deleteButtonClicked() {
 	const wishlistItemId = this.getAttribute('data')
 	const deleteResult = await fetchJSON(`/wishlist/api/delete/${wishlistItemId}`)
-	if (deleteResult.success) document.getElementById('wishlist_container')
-		.removeChild(this.parentElement)
+	if (deleteResult.success) await pageLoad()
 }
 
 function addWishlistItemContainer(item) {
@@ -38,25 +38,120 @@ function createWishlistItemDeleteButton(item) {
 	return wishlistDelete
 }
 
-function addMyItemsToOfferedItemSelection(myItem) {
-	const selection = document.getElementById('offer_offered_item')
-	const option = document.createElement('option')
-	option.setAttribute('value', myItem.id)
-	option.innerHTML = myItem.name
-	selection.appendChild(option)
+async function addWishlist(itemId) {
+	document.getElementById('wishlist_container').innerHTML = ''
+	const wishListItems = await fetchJSON(`/wishlist/api/getItems/${itemId}`)
+	if (wishListItems.length !== 0) {
+		wishListItems.forEach(wishlistItem => {
+			addWishlistItemContainer(wishlistItem)
+		})
+	} else {
+		const text = document.createElement('p')
+		text.setAttribute('class', 'empty_filler')
+		text.innerHTML = 'Empty wishlist'
+		document.getElementById('wishlist_container').appendChild(text)
+	}
+}
+
+/* SUGGESTIONS */
+async function addSuggestions(itemId) {
+	document.getElementById('suggestion_container').innerHTML = ''
+	const suggestions = await fetchJSON(`/suggestion/api/itemSuggestions/${itemId}`)
+	if (suggestions.length !== 0) {
+		suggestions.forEach(async suggestion => await addSuggestionToDOM(suggestion))
+	} else {
+		const text = document.createElement('p')
+		text.setAttribute('class', 'empty_filler')
+		text.innerHTML = 'No suggestions'
+		document.getElementById('suggestion_container').appendChild(text)
+	}
+}
+
+async function addSuggestionToDOM(suggestion) {
+	suggestion.item = await fetchJSON(`/item/api/itemDetails/${suggestion.item_id}`)
+	suggestion.suggested_item = await fetchJSON(`/item/api/itemDetails/${suggestion.suggested_item_id}`)
+	suggestion.suggested_user = await fetchJSON(`/user/api/userDetails/${suggestion.suggested_user_id}`)
+	document.getElementById('suggestion_container').appendChild(createSuggestionDOMElement(suggestion))
+}
+
+function createSuggestionDOMElement(suggestion) {
+	const suggestionContainer = document.createElement('div')
+	suggestionContainer.setAttribute('class', 'full_width_container')
+	suggestionContainer.append(createSuggestionFloatingTagDOMElement(suggestion),
+		createSuggestionUserDOMElement(suggestion), createSuggestionItemDOMElement(suggestion),
+		createSuggestionControlsDOMElement(suggestion))
+	return suggestionContainer
+}
+
+function createSuggestionFloatingTagDOMElement(suggestion) {
+	const floatingTagContainer = document.createElement('div')
+	floatingTagContainer.setAttribute('class', 'floating_tag')
+	floatingTagContainer.innerHTML = suggestion.item.name
+	return floatingTagContainer
+}
+
+function createSuggestionUserDOMElement(suggestion) {
+	const userAvatar = document.createElement('img')
+	userAvatar.setAttribute('class', 'user_avatar')
+	userAvatar.setAttribute('src', `/user/avatar/${suggestion.suggested_user.avatar}`)
+	const userName = document.createElement('div')
+	userName.setAttribute('class', 'user_name')
+	userName.innerHTML = suggestion.suggested_user.name
+	const userContainer = document.createElement('div')
+	userContainer.setAttribute('class', 'user_container')
+	userContainer.append(userAvatar, userName)
+	return userContainer
+}
+
+function createSuggestionItemDOMElement(suggestion) {
+	const name = document.createElement('h3')
+	name.innerHTML = suggestion.suggested_item.name
+	const description = document.createElement('p')
+	description.innerHTML = suggestion.suggested_item.description
+	const itemContainer = document.createElement('div')
+	itemContainer.setAttribute('class', 'item_details')
+	itemContainer.append(name, description)
+	return itemContainer
+}
+
+function createSuggestionControlsDOMElement(suggestion) {
+	const offerButton = document.createElement('div')
+	offerButton.setAttribute('class', 'control_button control_button_green')
+	offerButton.innerHTML = 'Create Offer'
+	offerButton.setAttribute('data', suggestion.id)
+	offerButton.onclick = suggestionOfferButtonClicked
+	const removeButton = document.createElement('div')
+	removeButton.setAttribute('class', 'control_button control_button_red')
+	removeButton.innerHTML = 'Remove'
+	removeButton.setAttribute('data', suggestion.id)
+	removeButton.onclick = suggestionRemoveButtonClicked
+	const controlsContainer = document.createElement('div')
+	controlsContainer.setAttribute('class', 'controls')
+	controlsContainer.append(offerButton, removeButton)
+	return controlsContainer
+}
+
+async function suggestionOfferButtonClicked() {
+	const suggestionId = this.getAttribute('data')
+	const offerResult = await fetchJSON(`/suggestion/api/createOffer/${suggestionId}`)
+	if (offerResult.success) await pageLoad()
+}
+
+async function suggestionRemoveButtonClicked() {
+	const suggestionId = this.getAttribute('data')
+	const deleteResult = await fetchJSON(`/suggestion/api/removeSuggestion/${suggestionId}`)
+	if (deleteResult.success) await pageLoad()
+}
+
+/* Page Load */
+const itemUrlLevelThree = 3
+const itemItemId = window.location.pathname.split('/')[itemUrlLevelThree]
+
+async function pageLoad() {
+	await addWishlist(itemItemId)
+	if (document.getElementById('suggestion_container') !== null) await addSuggestions(itemItemId)
 }
 
 (async() => {
-	const windowLocationPathnameLocation = 3
-	const itemId = window.location.pathname.split('/')[windowLocationPathnameLocation]
-	const wishListItems = await fetchJSON(`/wishlist/api/getItems/${itemId}`)
-	wishListItems.forEach(wishlistItem => {
-		addWishlistItemContainer(wishlistItem)
-	})
-	if (document.getElementById('offer_offered_item') !== null) {
-		const myItems = await fetchJSON('/item/api/myItems')
-		myItems.forEach(myItem => {
-			addMyItemsToOfferedItemSelection(myItem)
-		})
-	}
+	await pageLoad()
 })()
