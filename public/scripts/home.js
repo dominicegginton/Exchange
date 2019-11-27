@@ -10,7 +10,14 @@ async function search() {
 	document.getElementById('items').innerHTML = ''
 	const searchText = document.getElementById('search')['search'].value
 	const items = await fetchJSON(`/item/api/search?search=${searchText}`)
-	items.forEach(item => addItem(item))
+	if (items.length !== 0) {
+		items.forEach(item => addItem(item))
+	} else {
+		const text = document.createElement('p')
+		text.setAttribute('class', 'empty_filler')
+		text.innerHTML = 'No Items'
+		document.getElementById('items').appendChild(text)
+	}
 	return false
 }
 
@@ -39,7 +46,6 @@ document.getElementById('search').onsubmit = () => {
 
 document.getElementById('search')['search'].onkeyup = () => {
 	const object = document.getElementById('search')['search']
-	console.log(object)
 	const value = object.value
 	if (value !== '') object.classList.add('searchbox_valid')
 	else object.classList.remove('searchbox_valid')
