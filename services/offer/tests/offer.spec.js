@@ -330,3 +330,30 @@ describe('getUsersReceivedOffers()', () => {
 		done()
 	})
 })
+
+describe('reject()', () => {
+
+	beforeEach(async() => {
+		this.offerId = await this.offer.new(this.newOffer)
+	})
+
+	test('reject with valid offerId should delete offer for user', async done => {
+		expect.assertions(2)
+		expect(await this.offer.reject(this.offerId)).toBe(true)
+		const userOffers = await this.offer.getUsersReceivedOffers(this.userId)
+		expect(userOffers.length).toBe(0)
+		done()
+	})
+
+	test('reject with no offerId should error', async done => {
+		expect.assertions(1)
+		await expect(this.offer.reject()).rejects.toEqual(Error('offerId is empty'))
+		done()
+	})
+
+	test('reject with empty offerId should error', async done => {
+		expect.assertions(1)
+		await expect(this.offer.reject('')).rejects.toEqual(Error('offerId is empty'))
+		done()
+	})
+})
