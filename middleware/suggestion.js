@@ -44,17 +44,15 @@ async function createNewOffer(suggestionId, userId) {
 	try {
 		const [item, suggestion, user, offer] = [await new Item(), await new Suggestion(),
 			await new User(), await new Offer()]
-		const suggestionDetails = await suggestion.getDetails(suggestionId)
-		if (userId === suggestionDetails.suggested_user_id) {
-			[suggestion['item_id'], suggestion['suggested_item_id']] = [suggestion['suggested_item_id'],
-				suggestion['item_id']],
-			[suggestion['user_id'], suggestion['suggested_user_id']] = [suggestion['suggested_user_id'],
-				suggestion['user_id']]
+		const details = await suggestion.getDetails(suggestionId)
+		if (userId === details.suggested_user_id) {
+			[details['item_id'], details['suggested_item_id']] = [details['suggested_item_id'], details['item_id']],
+			[details['user_id'], details['suggested_user_id']] = [details['suggested_user_id'], details['user_id']]
 		}
-		const newOffer = { item: await item.getDetails(suggestionDetails.suggested_item_id),
-			user: await user.getDetails(suggestionDetails.suggested_user_id),
-			offered_item: await item.getDetails(suggestionDetails.item_id),
-			offered_user: await user.getDetails(suggestionDetails.user_id) }
+		const newOffer = { item: await item.getDetails(details.suggested_item_id),
+			user: await user.getDetails(details.suggested_user_id),
+			offered_item: await item.getDetails(details.item_id),
+			offered_user: await user.getDetails(details.user_id) }
 		await offer.new(newOffer)
 	} catch (error) {
 		throw error
