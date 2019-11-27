@@ -20,6 +20,11 @@ export EXCHANGE_DB_OFFER_PASSWORD=password
 export EXCHANGE_DB_OFFER_DATABASE=exchange_dev_db_offer
 export EXCHANGE_DB_OFFER_PORT=9944
 
+export EXCHANGE_DB_SUGGESTION_USERNAME=user
+export EXCHANGE_DB_SUGGESTION_PASSWORD=password
+export EXCHANGE_DB_SUGGESTION_DATABASE=exchange_dev_db_suggestion
+export EXCHANGE_DB_SUGGESTION_PORT=9955
+
 export EXCHANGE_GMAIL_USERNAME=exchange.dev.mail@gmail.com
 export EXCHANGE_GMAIL_PASSWORD=Letmein123!
 
@@ -42,6 +47,10 @@ function remove_dev_db() {
 	echo '> Removing Database exchange_dev_db_offer'
 	docker stop exchange_dev_db_offer
 	docker rm exchange_dev_db_offer
+
+	echo '> Removing Database exchange_dev_db_suggestion'
+	docker stop exchange_dev_db_suggestion
+	docker rm exchange_dev_db_suggestion
 	exit
 }
 
@@ -53,6 +62,8 @@ echo '> Creating Database volume exchange_dev_db_wishlist_data'
 docker volume create exchange_dev_db_wishlist_data
 echo '> Creating Database volume exchange_dev_db_offer_data'
 docker volume create exchange_dev_db_offer_data
+echo '> Creating Database volume exchange_dev_db_suggestion_data'
+docker volume create exchange_dev_db_suggestion_data
 
 echo '> Starting Database exchange_dev_db_user'
 docker run --name exchange_dev_db_user -p 9911:5432 -v exchange_dev_db_user_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_user -d postgres
@@ -62,6 +73,8 @@ echo '> Starting Database exchange_dev_db_wishlist'
 docker run --name exchange_dev_db_wishlist -p 9933:5432 -v exchange_dev_db_wishlist_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_wishlist -d postgres
 echo '> Starting Database exchange_dev_db_offer'
 docker run --name exchange_dev_db_offer -p 9944:5432 -v exchange_dev_db_offer_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_offer -d postgres
+echo '> Starting Database exchange_dev_db_suggestionr'
+docker run --name exchange_dev_db_suggestion -p 9955:5432 -v exchange_dev_db_suggestion_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_suggestion -d postgres
 
 echo '> Starting Node.js Server'
 node index.js

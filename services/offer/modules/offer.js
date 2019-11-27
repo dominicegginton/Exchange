@@ -2,8 +2,8 @@
 
 /* IMPORT MODULES */
 const {Pool} = require('pg')
-const Nodemailer = require('nodemailer')
 const Pug = require('koa-pug')
+const Mail = require('../../../utils/mail')
 const GenerateId = require('../../../utils/generateId')
 const Validate = require('../../../utils/validate')
 
@@ -63,17 +63,11 @@ class Offer {
 	}
 
 	async sendOfferEmail(newOffer) {
-		const transporter = Nodemailer.createTransport({service: 'gmail', port: 25, secure: true,
-			auth: {
-				user: process.env.EXCHANGE_GMAIL_USERNAME,
-				pass: process.env.EXCHANGE_GMAIL_PASSWORD
-			}
-		})
-		await transporter.sendMail({
-			from: '"Exchange ↔️" <mail@exchange.com>',
+		await Mail({
 			to: newOffer.user.email,
 			subject: `${newOffer.user.name}, you have a new offer on your ${newOffer.item.name} 😄`,
-			html: await this.pug.render('mail/offer_new', {offer: newOffer})
+			mail_template: 'mail/offer_new',
+			data: {offer: newOffer}
 		})
 	}
 
