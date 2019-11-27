@@ -6,7 +6,21 @@ async function fetchJSON(url) {
 	return data
 }
 
-function addMyItem(item) {
+/* MY ITEMS */
+
+async function addMyItems() {
+	const myItems = await fetchJSON('/item/api/myItems')
+	if (myItems.length !== 0) {
+		myItems.forEach(item => document.getElementById('my_items').appendChild(createItemDOMElement(item)))
+	} else {
+		const text = document.createElement('p')
+		text.setAttribute('class', 'empty_filler')
+		text.innerHTML = 'No Items'
+		document.getElementById('my_items').appendChild(text)
+	}
+}
+
+function createItemDOMElement(item) {
 	const name = document.createElement('p')
 	name.setAttribute('class', 'item_preview_name')
 	name.innerText = item.name
@@ -18,18 +32,22 @@ function addMyItem(item) {
 	const itemPreview = document.createElement('div')
 	itemPreview.setAttribute('class', 'item_preview_container')
 	itemPreview.setAttribute('onclick', `window.location='/item/details/${item.id}'`)
-	itemPreview.appendChild(image)
-	itemPreview.appendChild(name)
-	itemPreview.appendChild(description)
-	document.getElementById('my_items').appendChild(itemPreview)
+	itemPreview.append(image, name, description)
+	return itemPreview
 }
 
-async function acceptOfferButtonClicked() {
-	const offerId = this.getAttribute('data')
-	const acceptResult = await fetchJSON(`/offer/api/accept/${offerId}`)
-	console.log(acceptResult)
-	// if (acceptResult.success) document.getElementById('my_offers')
-	// 	.removeChild(this.parentElement.parentElement)
+/* MY OFFERS */
+
+async function addMyOffers() {
+	const myOffers = await fetchJSON('/offer/api/myOffers')
+	if (myOffers.length !== 0) {
+		myOffers.forEach(async offer => addMyOffer(offer))
+	} else {
+		const text = document.createElement('p')
+		text.setAttribute('class', 'empty_filler')
+		text.innerHTML = 'No Offers'
+		document.getElementById('my_offers').appendChild(text)
+	}
 }
 
 async function addMyOffer(offer) {
@@ -89,15 +107,21 @@ function createOfferAcceptDomElement(offer) {
 	return offerAccept
 }
 
+async function acceptOfferButtonClicked() {
+	const offerId = this.getAttribute('data')
+	const acceptResult = await fetchJSON(`/offer/api/accept/${offerId}`)
+	console.log(acceptResult)
+	// if (acceptResult.success) document.getElementById('my_offers')
+	// 	.removeChild(this.parentElement.parentElement)
+}
+
+/* PAGE LOAD */
+
+async function pageLoad() {
+	await addMyItems()
+	await addMyOffers()
+}
 
 (async() => {
-	const myItems = await fetchJSON('/item/api/myItems')
-	myItems.forEach(item => addMyItem(item))
-	const myOffers = await fetchJSON('/offer/api/myOffers')
-	if (myOffers.length !== 0) {
-		const myOffersHeading = document.createElement('h3')
-		myOffersHeading.innerHTML = 'My Offers'
-		document.getElementById('my_offers').appendChild(myOffersHeading)
-		myOffers.forEach(async(offer) => addMyOffer(offer))
-	}
+	await pageLoad()
 })()
