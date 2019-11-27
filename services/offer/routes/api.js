@@ -17,6 +17,19 @@ router.get('/api/myOffers', async ctx => {
 	} else ctx.redirect('/')
 })
 
+router.get('/api/reject/:offer_id', async ctx => {
+	try {
+		if (!!ctx.state.user) {
+			const offer = await new Offer()
+			await offer.reject(ctx.params.offer_id)
+			ctx.body = {success: true}
+			await offer.tearDown()
+		}
+	} catch (error) {
+		ctx.body = {success: false, message: error.message}
+	}
+})
+
 router.get('/api/new/:item_id', async ctx => {
 	try {
 		if (!!ctx.state.user) {

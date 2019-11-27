@@ -9,6 +9,7 @@ async function fetchJSON(url) {
 /* MY ITEMS */
 
 async function addMyItems() {
+	document.getElementById('my_items').innerHTML = ''
 	const myItems = await fetchJSON('/item/api/myItems')
 	if (myItems.length !== 0) {
 		myItems.forEach(item => document.getElementById('my_items').appendChild(createItemDOMElement(item)))
@@ -39,6 +40,7 @@ function createItemDOMElement(item) {
 /* MY OFFERS */
 
 async function addMyOffers() {
+	document.getElementById('my_offers').innerHTML = ''
 	const myOffers = await fetchJSON('/offer/api/myOffers')
 	if (myOffers.length !== 0) {
 		myOffers.forEach(async offer => addMyOffer(offer))
@@ -59,29 +61,29 @@ async function addMyOffer(offer) {
 
 function createOfferDomElement(offer) {
 	const offerContainer = document.createElement('div')
-	offerContainer.setAttribute('class', 'offer_container')
-	offerContainer.append(createItemDomElement(offer), createOfferedUserDomElement(offer),
-		createOfferedItemDomElement(offer), createOfferAcceptDomElement(offer))
+	offerContainer.setAttribute('class', 'full_width_container')
+	offerContainer.append(createOfferedUserDomElement(offer), createItemDomElement(offer),
+		createOfferedItemDomElement(offer), createOfferControlsDomElement(offer))
 	return offerContainer
 }
 
 function createItemDomElement(offer) {
-	const offerItemContainer = document.createElement('div')
-	offerItemContainer.setAttribute('class', 'offer_item_container')
-	offerItemContainer.innerHTML = offer.item.name
-	offerItemContainer.setAttribute('onclick', `window.location='/item/details/${offer.item_id}'`)
-	return offerItemContainer
+	const itemContainer = document.createElement('div')
+	itemContainer.setAttribute('class', 'floating_tag')
+	itemContainer.innerHTML = offer.item.name
+	itemContainer.setAttribute('onclick', `window.location='/item/details/${offer.item_id}'`)
+	return itemContainer
 }
 
 function createOfferedUserDomElement(offer) {
 	const offerOfferedUserAvatar = document.createElement('img')
-	offerOfferedUserAvatar.setAttribute('class', 'offer_offered_user_avatar')
+	offerOfferedUserAvatar.setAttribute('class', 'user_avatar')
 	offerOfferedUserAvatar.setAttribute('src', `user/avatar/${offer.offered_user.avatar}`)
 	const offerOfferedUserName = document.createElement('div')
-	offerOfferedUserName.setAttribute('class', 'offer_offered_user_name')
+	offerOfferedUserName.setAttribute('class', 'user_name')
 	offerOfferedUserName.innerHTML = offer.offered_user.name
 	const offerOfferedUserContainer = document.createElement('div')
-	offerOfferedUserContainer.setAttribute('class', 'offer_offered_user_container')
+	offerOfferedUserContainer.setAttribute('class', 'user_container')
 	offerOfferedUserContainer.append(offerOfferedUserAvatar, offerOfferedUserName)
 	return offerOfferedUserContainer
 }
@@ -92,19 +94,27 @@ function createOfferedItemDomElement(offer) {
 	const offerOfferedItemDescription = document.createElement('p')
 	offerOfferedItemDescription.innerHTML = offer.offered_item.description
 	const offerOfferedItemContainer = document.createElement('div')
-	offerOfferedItemContainer.setAttribute('class', 'offer_offered_item_container')
+	offerOfferedItemContainer.setAttribute('class', 'item_details')
 	offerOfferedItemContainer.setAttribute('onclick', `window.location='/item/details/${offer.offered_item_id}'`)
 	offerOfferedItemContainer.append(offerOfferedItemName, offerOfferedItemDescription)
 	return offerOfferedItemContainer
 }
 
-function createOfferAcceptDomElement(offer) {
-	const offerAccept = document.createElement('div')
-	offerAccept.setAttribute('class', 'offer_accept')
-	offerAccept.setAttribute('data', offer.id)
-	offerAccept.onclick = acceptOfferButtonClicked
-	offerAccept.innerHTML = 'Accept'
-	return offerAccept
+function createOfferControlsDomElement(offer) {
+	const acceptButton = document.createElement('div')
+	acceptButton.setAttribute('class', 'control_button control_button_green')
+	acceptButton.innerHTML = 'Accept'
+	acceptButton.setAttribute('data', offer.id)
+	acceptButton.onclick = acceptOfferButtonClicked
+	const rejectButton = document.createElement('div')
+	rejectButton.setAttribute('class', 'control_button control_button_red')
+	rejectButton.innerHTML = 'Reject'
+	rejectButton.setAttribute('data', offer.id)
+	rejectButton.onclick = rejectOfferButtonClicked
+	const controlsContainer = document.createElement('div')
+	controlsContainer.setAttribute('class', 'controls')
+	controlsContainer.append(acceptButton, rejectButton)
+	return controlsContainer
 }
 
 async function acceptOfferButtonClicked() {
@@ -113,6 +123,12 @@ async function acceptOfferButtonClicked() {
 	console.log(acceptResult)
 	// if (acceptResult.success) document.getElementById('my_offers')
 	// 	.removeChild(this.parentElement.parentElement)
+}
+
+async function rejectOfferButtonClicked() {
+	const offerId = this.getAttribute('data')
+	const response = await fetchJSON(`/offer/api/reject/${offerId}`)
+	if (response.success) pageLoad()
 }
 
 /* PAGE LOAD */
