@@ -28,6 +28,8 @@ export EXCHANGE_DB_SUGGESTION_PORT=9955
 export EXCHANGE_GMAIL_USERNAME=exchange.dev.mail@gmail.com
 export EXCHANGE_GMAIL_PASSWORD=Letmein123!
 
+export NODE_ENV=development
+
 trap remove_dev_db INT
 
 function remove_dev_db() {

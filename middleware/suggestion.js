@@ -29,7 +29,7 @@ async function calcWishlistSuggestions(wishlistItem, itemDetails) {
 			})
 		})
 	})
-	user.tearDown(), item.tearDown(), wishlist.tearDown(), suggestion.tearDown()
+	await user.tearDown(), await item.tearDown(), await wishlist.tearDown(), await suggestion.tearDown()
 }
 
 async function calcItemSuggestions(itemId) {
@@ -37,13 +37,13 @@ async function calcItemSuggestions(itemId) {
 	const itemDetails = await item.getDetails(itemId)
 	itemDetails.wishlist = await wishlist.getItems(itemDetails.id)
 	itemDetails.wishlist.forEach(async wishlistItem => await calcWishlistSuggestions(wishlistItem, itemDetails))
-	item.tearDown(), wishlist.tearDown()
+	await item.tearDown(), await wishlist.tearDown()
 }
 
 async function createNewOffer(suggestionId, userId) {
+	const [item, suggestion, user, offer] = [await new Item(), await new Suggestion(),
+		await new User(), await new Offer()]
 	try {
-		const [item, suggestion, user, offer] = [await new Item(), await new Suggestion(),
-			await new User(), await new Offer()]
 		const details = await suggestion.getDetails(suggestionId)
 		if (userId === details.suggested_user_id) {
 			[details['item_id'], details['suggested_item_id']] = [details['suggested_item_id'], details['item_id']],
@@ -56,6 +56,8 @@ async function createNewOffer(suggestionId, userId) {
 		await offer.new(newOffer)
 	} catch (error) {
 		throw error
+	} finally {
+		await user.tearDown(), await item.tearDown(), await offer.tearDown(), await suggestion.tearDown()
 	}
 }
 

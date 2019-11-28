@@ -18,19 +18,21 @@ router.get('/api/myOffers', async ctx => {
 })
 
 router.get('/api/reject/:offer_id', async ctx => {
+	const offer = await new Offer()
 	try {
 		if (!!ctx.state.user) {
-			const offer = await new Offer()
 			await offer.reject(ctx.params.offer_id)
 			ctx.body = {success: true}
-			await offer.tearDown()
 		}
 	} catch (error) {
 		ctx.body = {success: false, message: error.message}
+	} finally {
+		await offer.tearDown()
 	}
 })
 
 router.get('/api/new/:item_id', async ctx => {
+	const offer = await new Offer()
 	try {
 		if (!!ctx.state.user) {
 			const newOffer = {
@@ -39,13 +41,13 @@ router.get('/api/new/:item_id', async ctx => {
 				offered_item: ctx.state.offered_item,
 				offered_user: ctx.state.offered_user
 			}
-			const offer = await new Offer()
 			await offer.new(newOffer)
 			ctx.body = {success: true}
-			await offer.tearDown()
 		}
 	} catch (error) {
 		ctx.body = {success: false, message: error.message}
+	} finally {
+		await offer.tearDown()
 	}
 })
 
