@@ -16,7 +16,7 @@ html(lang='en')
 				.inline_header_button
 					h3 My Wish List
 					.separator
-					a(href = '/wishlist/new/' + item.id) New
+					a#new_wishlist_item(href = '/wishlist/new/' + item.id) New
 			else
 				h3 Wish List
 			#wishlist_container
