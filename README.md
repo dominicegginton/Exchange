@@ -16,7 +16,7 @@ Packages: sharp, nodemailer.
 
 A simple website to share details of items to be swapped.
 
-1. Without logging in visitors can view the items (thumbnail and description) that users want to swap.
+1. ✅ Without logging in visitors can view the items (thumbnail and description) that users want to swap.
 2. ✅ When logged in they can create their own list of items to swap, this should include:
     1. Short description.
     2. Uploaded photo.
@@ -41,11 +41,11 @@ This step adds features that improve the site's GDPR compliance.
 
 The final step is to build an auto-suggestion feature to make it easier for the users to find someone willing to swap.
 
-1. The site should include a full-text search for items people are looking for.
-2. Users should create the list of items they want to swap for by choosing from a dropdown list and clicking an 'add' button. If the item is not in the list they can enter it manually.
-3. The system should analyse the items the person wants, compare it to the items people want to swap and automatically suggest the swaps by sending out an automatic email to both parties.
-4. Each item the person wants to swap should have a 'suggested swaps' link that takes them to a page that suggests who might be willing to swap and for what, including pictures.
-5. This should include the 'make an offer' button
+1. ✅ The site should include a full-text search for items people are looking for.
+2. ✅ Users should create the list of items they want to swap for by choosing from a dropdown list and clicking an 'add' button. If the item is not in the list they can enter it manually.
+3. ✅ The system should analyse the items the person wants, compare it to the items people want to swap and automatically suggest the swaps by sending out an automatic email to both parties.
+4. ✅ Each item the person wants to swap should have a 'suggested swaps' link that takes them to a page that suggests who might be willing to swap and for what, including pictures.
+5. ✅ This should include the 'make an offer' button
 
 ## Getting Started
 
@@ -108,6 +108,20 @@ npm run clean:dev
 
 ### Running Tests
 
+#### Unit Tests
+
 ``` bash
 npm test
+```
+
+#### Acceptance Tests
+
+``` bash
+npm run acceptance
+```
+
+#### Linter
+
+``` bash
+npm run linter
 ```
