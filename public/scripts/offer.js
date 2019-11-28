@@ -9,8 +9,20 @@ async function fetchJSON(url) {
 /* NEW OFFER */
 async function createOffer() {
 	const offeredItemId = document.getElementById('offer_form')['offered_item'].value
-	const offerResponse = await fetchJSON(`/offer/api/new/${itemId}?offered_item_id=${offeredItemId}`)
-	console.log(offerResponse)
+	const x = await fetchJSON(`/offer/api/new/${itemId}?offered_item_id=${offeredItemId}`)
+	document.getElementById('offer_form_container').innerHTML = ''
+	if (x.success ) {
+		const text = document.createElement('p')
+		text.setAttribute('class', 'empty_filler')
+		text.setAttribute('id', 'response')
+		text.innerHTML = 'Offer Sent'
+		document.getElementById('offer_form_container').appendChild(text)
+	} else {
+		const text = document.createElement('p')
+		text.setAttribute('class', 'empty_filler')
+		text.innerHTML = x.message
+		document.getElementById('offer_form_container').appendChild(text)
+	}
 	return false
 }
 
