@@ -16,6 +16,10 @@ beforeEach( async() => {
 	this.item = await new Item()
 })
 
+afterEach(async() => {
+	this.item.tearDown()
+})
+
 describe('new()', () => {
 
 	test('add new item with valid data', async done => {
@@ -230,6 +234,60 @@ describe('getUsersItems()', () => {
 		expect.assertions(1)
 		const userItems = await this.item.getUsersItems(this.user_id)
 		expect(userItems.length).toBe(0)
+		done()
+	})
+})
+
+describe('getItems()', () => {
+
+	beforeEach(async() => {
+		const newItem1 = {name: 'Test', description: 'This is a new item', user_id: this.user_id}
+		const newItem2 = {name: 'Foo', description: 'This is a old item', user_id: this.user_id}
+		const newItem3 = {name: 'Boo', description: 'This is a good item', user_id: this.user_id}
+		await this.item.new(newItem1)
+		await this.item.new(newItem2)
+		await this.item.new(newItem3)
+	})
+
+	test('no search object should return all items', async done => {
+		const items = await this.item.getItems()
+		expect(items.length).toBe(3)
+		done()
+	})
+
+	test('empty search object should return all items', async done => {
+		const items = await this.item.getItems('')
+		expect(items.length).toBe(3)
+		done()
+	})
+
+	test('search for string in title should return objects', async done => {
+		const items = await this.item.getItems('foo')
+		expect(items.length).toBe(1)
+		expect(items[0].name).toBe('Foo')
+		expect(items[0].description).toBe('This is a old item')
+		expect(items[0].user_id).toBe(this.user_id)
+		done()
+	})
+
+	test('search for string that matches a item twice should return no duplicates', async done => {
+		const items = await this.item.getItems('Boo boo')
+		expect(items.length).toBe(1)
+		expect(items[0].name).toBe('Boo')
+		expect(items[0].description).toBe('This is a good item')
+		expect(items[0].user_id).toBe(this.user_id)
+		done()
+	})
+
+	test('search for string should be able to return multipul objects', async done => {
+		const items = await this.item.getItems('test boo')
+		expect(items.length).toBe(2)
+		expect(items[0].name).toBe('Test')
+		expect(items[0].description).toBe('This is a new item')
+		expect(items[0].user_id).toBe(this.user_id)
+		expect(items[1].name).toBe('Boo')
+		expect(items[1].description).toBe('This is a good item')
+		expect(items[1].user_id).toBe(this.user_id)
 		done()
 	})
 })

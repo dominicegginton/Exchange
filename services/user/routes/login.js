@@ -14,15 +14,17 @@ router.get('/login', async ctx => {
 })
 
 router.post('/login', async ctx => {
+	const user = await new User()
 	try {
 		const userDetails = ctx.request.body
-		const user = await new User()
 		const userId = await user.login(userDetails)
 		ctx.session.authenticated = true
 		ctx.session.id = userId
 		ctx.redirect('/')
 	} catch (error) {
 		await ctx.render('login', {error: error})
+	} finally {
+		await user.tearDown()
 	}
 })
 

@@ -1,24 +1,26 @@
 'use strict'
 
 /* IMPORT MODULES */
-const {Client} = require('pg')
-const Nodemailer = require('nodemailer')
+const {Pool} = require('pg')
 const Pug = require('koa-pug')
+const Mail = require('../../../utils/mail')
 const GenerateId = require('../../../utils/generateId')
 const Validate = require('../../../utils/validate')
 
 class Offer {
 	constructor() {
 		return (async() => {
+			if (!Offer.pool) {
+				Offer.pool = new Pool({
+					user: process.env.EXCHANGE_DB_OFFER_USERNAME,
+					host: process.env.EXCHANGE_DB_OFFER_HOST,
+					database: process.env.EXCHANGE_DB_OFFER_DATABASE,
+					password: process.env.EXCHANGE_DB_OFFER_PASSWORD,
+					port: process.env.EXCHANGE_DB_OFFER_PORT,
+				})
+			}
 			this.pug = new Pug({viewPath: './views'})
-			this.database = new Client({
-				user: process.env.EXCHANGE_DB_OFFER_USERNAME,
-				host: process.env.EXCHANGE_DB_OFFER_HOST,
-				database: process.env.EXCHANGE_DB_OFFER_DATABASE,
-				password: process.env.EXCHANGE_DB_OFFER_PASSWORD,
-				port: process.env.EXCHANGE_DB_OFFER_PORT,
-			})
-			await this.database.connect()
+			this.database = await Offer.pool.connect()
 			await this.database.query(`CREATE TABLE IF NOT EXISTS Offers
 			(id varchar(36) PRIMARY KEY NOT NULL, item_id varchar(40) NOT NULL, user_id varchar(36) NOT NULL,
 			offered_item_id varchar(36) NOT NULL, offered_user_id varchar(36) NOT NULL);`)
@@ -61,17 +63,11 @@ class Offer {
 	}
 
 	async sendOfferEmail(newOffer) {
-		const transporter = Nodemailer.createTransport({service: 'gmail', port: 25, secure: true,
-			auth: {
-				user: process.env.EXCHANGE_GMAIL_USERNAME,
-				pass: process.env.EXCHANGE_GMAIL_PASSWORD
-			}
-		})
-		await transporter.sendMail({
-			from: '"Exchange ↔️" <mail@exchange.com>',
+		await Mail({
 			to: newOffer.user.email,
 			subject: `${newOffer.user.name}, you have a new offer on your ${newOffer.item.name} 😄`,
-			html: await this.pug.render('mail/offer_new', {offer: newOffer})
+			mail_template: 'mail/offer_new',
+			data: {offer: newOffer}
 		})
 	}
 
@@ -88,6 +84,21 @@ class Offer {
 		const sql = `SELECT * FROM Offers WHERE user_id='${userId}';`
 		const result = await this.database.query(sql)
 		return result.rows
+	}
+
+	async reject(offerId) {
+		try {
+			if (!offerId) throw new Error('offerId is empty')
+			const sql = `DELETE FROM Offers WHERE id = '${offerId}';`
+			await this.database.query(sql)
+			return true
+		} catch (error) {
+			throw error
+		}
+	}
+
+	async tearDown() {
+		this.database.release()
 	}
 }
 

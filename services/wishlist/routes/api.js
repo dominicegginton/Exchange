@@ -13,6 +13,7 @@ router.post('/api/new/:item_id', async ctx => {
 	const wishListItem = ctx.request.body
 	wishListItem.item_id = ctx.params.item_id
 	await wishlist.new(wishListItem)
+	await wishlist.tearDown()
 })
 
 router.get('/api/getItems/:item_id', async ctx => {
@@ -22,6 +23,7 @@ router.get('/api/getItems/:item_id', async ctx => {
 		if (ctx.state.user.id === wishListItems[i].user_id) wishListItems[i].delete = true
 	}
 	ctx.body = wishListItems
+	await wishlist.tearDown()
 })
 
 router.get('/api/delete/:item_id', async ctx => {
@@ -29,6 +31,7 @@ router.get('/api/delete/:item_id', async ctx => {
 	const deleteItem = {wishlist_item_id: ctx.params.item_id, user_id: ctx.state.user.id}
 	await wishlist.delete(deleteItem)
 	ctx.body = {success: true}
+	await wishlist.tearDown()
 })
 
 module.exports = router

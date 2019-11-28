@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo '> Creating Database volume exchange_acceptance_db_user_data'
+docker volume create exchange_acceptance_db_user_data
+echo '> Creating Database volume exchange_acceptance_db_item_data'
+docker volume create exchange_acceptance_db_item_data
+echo '> Creating Database volume exchange_acceptance_db_wishlist_data'
+docker volume create exchange_acceptance_db_wishlist_data
+echo '> Creating Database volume exchange_acceptance_db_offer_data'
+docker volume create exchange_acceptance_db_offer_data
+echo '> Creating Database volume exchange_acceptance_db_suggestion_data'
+docker volume create exchange_acceptance_db_suggestion_data
+
+echo '> Starting Database exchange_acceptance_db_user'
+docker run --name exchange_acceptance_db_user -p 9911:5432 -v exchange_acceptance_db_user_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_acceptance_db_user -d postgres
+echo '> Starting Database exchange_acceptance_db_item'
+docker run --name exchange_acceptance_db_item -p 9922:5432 -v exchange_acceptance_db_item_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_acceptance_db_item -d postgres
+echo '> Starting Database exchange_acceptance_db_wishlist'
+docker run --name exchange_acceptance_db_wishlist -p 9933:5432 -v exchange_acceptance_db_wishlist_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_acceptance_db_wishlist -d postgres
+echo '> Starting Database exchange_acceptance_db_offer'
+docker run --name exchange_acceptance_db_offer -p 9944:5432 -v exchange_acceptance_db_offer_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_acceptance_db_offer -d postgres
+echo '> Starting Database exchange_acceptance_db_suggestionr'
+docker run --name exchange_acceptance_db_suggestion -p 9955:5432 -v exchange_acceptance_db_suggestion_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_acceptance_db_suggestion -d postgres

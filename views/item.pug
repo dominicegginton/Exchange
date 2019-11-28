@@ -12,18 +12,19 @@ html(lang='en')
 				img(src='/item/image/' + item.image)
 				h1=item.name
 				p.item_description=item.description
-				if user.id === item.user_id
-					.inline_header_button
-						h3 My Wish List
-						.separator
-						a(href = '/wishlist/new/' + item.id) New
-				else
-					h3 Wish List
-				#wishlist_container
-				if user.id !== item.user_id
-					h3 Make A Offer
-					form(method='POST', action='/offer/new/' + item.id, enctype="multipart/form-data", autocomplete="off")
-						select#offer_offered_item(name='offered_item_id')
-						.group
-							button.button(type='submit') Offer
+			if user.id === item.user_id
+				.inline_header_button
+					h3 My Wish List
+					.separator
+					a#new_wishlist_item(href = '/wishlist/new/' + item.id) New
+			else
+				h3 Wish List
+			#wishlist_container
+			if user.id === item.user_id
+				h3 Suggested Exchanges
+				#suggestion_container
+			else
+				h3 Make A Offer
+				#offer_form_container
+	script(src = '/scripts/offer.js')
 	script(src = '/scripts/item.js')
