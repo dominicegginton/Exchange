@@ -10,7 +10,7 @@ html(lang='en')
 			h1 Welcome
 			h2 login to start exchanging
 			if error
-				.error
+				.error#error
 					p=error.message
 			form(method='POST', action='/user/login', enctype="multipart/form-data", autocomplete="off")
 				.group
