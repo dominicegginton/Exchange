@@ -125,3 +125,9 @@ npm run acceptance
 ``` bash
 npm run linter
 ```
+
+#### Dependency Check
+
+``` bash
+npm run npm-check
+```

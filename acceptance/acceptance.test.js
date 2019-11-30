@@ -4,6 +4,8 @@ const Puppeteer = require('puppeteer')
 const Shell = require('shelljs')
 const { configureToMatchImageSnapshot } = require('jest-image-snapshot')
 
+jest.mock('nodemailer')
+
 const viewport = {
 	width: 1500,
 	height: 2000
@@ -399,6 +401,22 @@ describe('Create Offer', () => {
 		done()
 	})
 
+	test('User can not see offer form on own item', async done => {
+		await this.page.goto('http://localhost:4040/item/new', { timeout: 30000, waitUntil: 'load' })
+		await this.page.type('input[name=name]', this.testItemTwo.name)
+		await this.page.type('textarea[name=description]', this.testItemTwo.description)
+		const uploadFour = await this.page.$('input[type=file]')
+		await uploadFour.uploadFile(this.testItemTwo.image)
+		await this.page.click('button[type=submit]')
+		await this.page.waitFor(500)
+		this.itemIdTwo = this.page.url().split('/')[5]
+		await this.page.goto(`http://localhost:4040/item/details/${this.itemId}`, { timeout: 30000, waitUntil: 'load' })
+		const image = await this.page.screenshot()
+		expect(image).toMatchImageSnapshot()
+		await this.page.waitFor(500)
+		done()
+	})
+
 	test('User should be able to create offer on item', async done => {
 		await this.page.goto('http://localhost:4040/item/new', { timeout: 30000, waitUntil: 'load' })
 		await this.page.type('input[name=name]', this.testItemTwo.name)
@@ -411,6 +429,8 @@ describe('Create Offer', () => {
 		await this.page.goto(`http://localhost:4040/item/details/${this.itemId}`, { timeout: 30000, waitUntil: 'load' })
 		await this.page.select('select[name=offered_item]', this.itemIdTwo)
 		await this.page.click('button[type=submit]')
+		const image = await this.page.screenshot()
+		expect(image).toMatchImageSnapshot()
 		await this.page.waitFor(500)
 
 		await this.page.goto('http://localhost:4040/user/logout', { timeout: 30000, waitUntil: 'load' })
@@ -422,8 +442,8 @@ describe('Create Offer', () => {
 		await this.page.click('button[type=submit]')
 		await this.page.waitFor(500)
 		await this.page.goto('http://localhost:4040/user/', { timeout: 30000, waitUntil: 'load' })
-		const image = await this.page.screenshot()
-		expect(image).toMatchImageSnapshot()
+		const imageTwo = await this.page.screenshot()
+		expect(imageTwo).toMatchImageSnapshot()
 		done()
 	})
 })
@@ -526,5 +546,5 @@ describe('Create Suggestions', () => {
 		const imageTwo = await this.page.screenshot()
 		expect(imageTwo).toMatchImageSnapshot()
 		done()
-	})
+	}, 20000)
 })
