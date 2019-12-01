@@ -94,7 +94,7 @@ docker-compose down -v
 
 #### Locally (Development)
 
-To run `Exchange` locally on your development machine use the provided shell script to spin up the required databases in docker containers along with corresponding data volumes, after `ctrl-c` is pressed to stop the node.js server, the shell script will remove the docker containers.
+To run `Exchange` locally with [nodemon](https://github.com/remy/nodemon/) on your development machine use the provided shell script to spin up the required databases in docker containers along with corresponding data volumes, after `ctrl-c` is pressed to stop the node.js server, the shell script will remove the docker containers.
 
 ``` bash
 npm run start:dev

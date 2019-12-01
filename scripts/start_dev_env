@@ -79,4 +79,4 @@ echo '> Starting Database exchange_dev_db_suggestionr'
 docker run --name exchange_dev_db_suggestion -p 9955:5432 -v exchange_dev_db_suggestion_data:/var/lib/postgresql/data -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=exchange_dev_db_suggestion -d postgres
 
 echo '> Starting Node.js Server'
-node index.js
+nodemon index.js
