@@ -39,7 +39,7 @@
     "fs-extra": "^8.1.0",
     "koa": "^2.11.0",
     "koa-body": "^4.1.1",
-    "koa-bodyparser": "^4.2.1",
+    "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
     "koa-logger": "^3.2.1",
     "koa-pug": "^4.0.2",
