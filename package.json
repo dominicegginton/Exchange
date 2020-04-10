@@ -48,7 +48,7 @@
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.1",
     "mime-types": "^2.1.25",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "nodemailer": "^6.3.1",
     "npm-check": "^5.9.0",
     "pg": "^8.0.2",
