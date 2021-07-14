@@ -2,6 +2,8 @@
 
 > A dynamic website built with `Koa` allowing users to exchange items
 
+**Exchange was built as a univeristy project, I have now archive this as I no longer plan to provide support and updates**
+
 ## Contents
 
 1. [Assignment Question](#Assignment-Question)
